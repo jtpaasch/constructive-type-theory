@@ -1,0 +1,3438 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{amsmath,amssymb,ebproof}
+
+\newcommand\hypo{\Hypo}
+\newcommand\infer{\Infer}
+\newcommand\ellipsis{\Ellipsis}
+
+\newcommand\term{\mathsf}
+
+\def\Type/{\term{Type}}
+\def\Form/{\term{F}}
+\def\Intro/{\term{I}}
+\def\Elim/{\term{E}}
+\def\Eq/{\term{Eq}}
+\def\Nat/{\mathbb{N}}
+\def\NatF/{$\Nat/$-$\Form/$}
+\def\NatI/{$\Nat/$-$\Intro/$}
+\def\Bool/{\mathbb{B}}
+\def\true/{\term{tt}}
+\def\false/{\term{ff}}
+\def\BoolF/{$\Bool/$-$\Form/$}
+\def\BoolI/{$\Bool/$-$\Intro/$}
+\def\BoolE/{$\Bool/$-$\Elim/$}
+\def\Dom/{\term{D}}
+\def\DomF/{$\Dom/$-$\Form/$}
+\def\DomI/{$\Dom/$-$\Intro/$}
+\def\Aspasia/{\term{Aspasia}}
+\def\Bucephalus/{\term{Bucephalus}}
+\def\Callias/{\term{Callias}}
+
+\newcommand\prf[2]{\term{sat(#1, #2)}}
+
+\newcommand\human[1]{\term{human(#1)}}
+\def\humanF/{$\term{human}$-$\Form/$}
+\def\humanI/{$\term{human}$-$\Intro/$}
+
+\newcommand\even[1]{\term{even(#1)}}
+\def\evenF/{$\term{even}$-$\Form/$}
+\def\evenI/{$\term{even}$-$\Intro/$}
+
+\newcommand\unicorn[1]{\term{unicorn(#1)}}
+\def\unicornF/{$\term{unicorn}$-$\Form/$}
+
+\newcommand\seated[1]{\term{seated(#1)}}
+\newcommand\horse[1]{\term{horse(#1)}}
+
+\newcommand\animal[1]{\term{animal(#1)}}
+\def\animalF/{$\term{animal}$-$\Form/$}
+\def\animalI/{$\term{animal}$-$\Intro/$}
+
+\def\SigmaBinder/{\Sigma}
+\newcommand\depprod[3]{\term{\SigmaBinder/ #1 : #2, #3}}
+\def\SigmaF/{$\SigmaBinder/$-$\Form/$}
+\def\SigmaI/{$\SigmaBinder/$-$\Intro/$}
+\def\SigmaE/{$\SigmaBinder/$-$\Elim/$}
+\def\SigmaEq/{$\SigmaBinder/$-$\Eq/$}
+\def\SigmaEL/{$\SigmaBinder/$-$\Elim/_{1}$}
+\def\SigmaER/{$\SigmaBinder/$-$\Elim/_{2}$}
+\def\SigmaEqL/{$\SigmaBinder/$-$\Eq/_{1}$}
+\def\SigmaEqR/{$\SigmaBinder/$-$\Eq/_{2}$}
+
+\def\pairSymbol/{\times}
+\def\pairF/{$\pairSymbol/$-$\Form/$}
+\def\pairI/{$\pairSymbol/$-$\Intro/$}
+\def\pairE/{$\pairSymbol/$-$\Elim/$}
+\def\pairEL/{$\pairSymbol/$-$\Elim/_{1}$}
+\def\pairER/{$\pairSymbol/$-$\Elim/_{2}$}
+\def\pairEq/{$\pairSymbol/$-$\Eq/$}
+\def\pairEqL/{$\pairSymbol/$-$\Eq/_{1}$}
+\def\pairEqR/{$\pairSymbol/$-$\Eq/_{2}$}
+\newcommand\pair[2]{\term{\langle #1, #2 \rangle}}
+\newcommand\fst[1]{\term{fst(#1)}}
+\newcommand\snd[1]{\term{snd(#1)}}
+
+\def\PiBinder/{\Pi}
+\newcommand\depfunc[3]{\term{\PiBinder/ #1 : #2, #3}}
+\def\PiF/{$\PiBinder/$-$\Form/$}
+\def\PiI/{$\PiBinder/$-$\Intro/$}
+\def\PiE/{$\PiBinder/$-$\Elim/$}
+\def\PiEq/{$\PiBinder/$-$\Eq/$}
+
+\def\everyBinder/{\forall}
+\def\everyF/{$\everyBinder/$-$\Form/$}
+\def\everyI/{$\everyBinder/$-$\Intro/$}
+\def\everyE/{$\everyBinder/$-$\Elim/$}
+\def\everyEq/{$\everyBinder/$-$\Eq/$}
+\newcommand\every[3]{\term{\everyBinder/ #1 : #2, #3}}
+
+\def\someBinder/{\exists}
+\def\someF/{$\someBinder/$-$\Form/$}
+\def\someI/{$\someBinder/$-$\Intro/$}
+\def\someE/{$\someBinder/$-$\Elim/$}
+\def\someEq/{$\someBinder/$-$\Eq/$}
+\newcommand\some[3]{\term{\someBinder/ #1 : #2, #3}}
+
+\def\abstrBinder/{\lambda}
+\def\abstrF/{$\abstrBinder/$-$\Form/$}
+\def\abstrI/{$\abstrBinder/$-$\Intro/$}
+\def\abstrE/{$\abstrBinder/$-$\Elim/$}
+\def\abstrEq/{$\abstrBinder/$-$\Eq/$}
+\def\appFunc/{\mathsf{app}}
+\newcommand\abstr[3]{\term{\abstrBinder/ #1 : #2.#3}}
+\newcommand\app[2]{\term{\appFunc/(#1, #2)}}
+
+\def\PiBoldAbbr/{\mathbf{\Pi}}
+\def\SigmaBoldAbbr/{\mathbf{\Sigma}}
+\newcommand\PI[3]{\term{\PiBoldAbbr/^{#1}(#2, #3)}}
+\newcommand\SIG[3]{\term{\SigmaBoldAbbr/^{#1}(#2, #3)}}
+
+\def\Orth/{\bot}
+\def\PiPosOrth/{$\PiBoldAbbr/^{+\Orth/}$}
+\def\PiNegOrth/{$\PiBoldAbbr/^{-\Orth/}$}
+\def\SigmaPosOrth/{$\SigmaBoldAbbr/^{+\Orth/}$}
+\def\SigmaNegOrth/{$\SigmaBoldAbbr/^{-\Orth/}$}
+
+\def\SigmaBoldEL/{$\SigmaBoldAbbr/$-$\Elim/_{1}$}
+\def\SigmaBoldER/{$\SigmaBoldAbbr/$-$\Elim/_{2}$}
+\def\SigmaBoldEqL/{$\SigmaBoldAbbr/$-$\Eq/_{1}$}
+\def\SigmaBoldEqR/{$\SigmaBoldAbbr/$-$\Eq/_{2}$}
+\def\PiBoldE/{$\PiBoldAbbr/$-$\Elim/$}
+\def\PiBoldEq/{$\PiBoldAbbr/$-$\Eq/$}
+\def\PiBoldI/{$\PiBoldAbbr/$-$\Intro/$}
+
+\def\PiNegExpand/{$\PiBoldAbbr/^{-} \rightarrow \bot$}
+\def\PiNegCollapse/{$\bot \rightarrow \PiBoldAbbr/^{-}$}
+\def\SigmaNegExpand/{$\SigmaBoldAbbr/^{-} \rightarrow \bot$}
+\def\SigmaNegCollapse/{$\bot \rightarrow \SigmaBoldAbbr/^{-}$}
+
+\def\negSymbol/{\lnot}
+\def\Falsum/{\bot}
+\def\negE/{$\Falsum/$-$\Elim/$}
+\def\negI/{$\Falsum/$-$\Intro/$}
+\def\negExpand/{$\Falsum/$-$\rightarrow$}
+\def\negCollapse/{$\rightarrow$-$\Falsum/$}
+
+\def\SubstType/{$\term{Sub}_{1}$}
+\def\SubstTerm/{$\term{Sub}_{2}$}
+
+
+\begin{document}
+
+\title{Constructive Type Theory}
+\author{JT Paasch}
+\date{}
+
+\maketitle
+
+This is a basic introduction to the constructive type theory (CTT) of Per Martin-L\"of. It is also sometimes called intuitionistic type theory (ITT). It will be helpful to have some familiarity with natural deduction, first order logic, or perhaps even the lambda calculus. However, I have tried to make no assumptions, and have attempted to explain everything (without being too verbose). 
+
+Even the simplest fully-worked CTT examples are not trivial, and derivations can quickly become rather large. For this reason, many introductions to constructive type theory do not include fully worked examples.
+
+Here, I have tried to provide lots of fully worked examples, in order to illustrate all of the basic concepts. In particular, I focus on how to use elimination rules to build functions, and I spend a good deal of time explaining how dependent types play out. To keep everything as simple as possible, I only use finite types, and I avoid recursive types.
+
+
+\section{Introduction}
+
+Constructive type theory (CTT) was designed as a system that we can use to reason about mathematics constructively. It is something like a metalanguage, that we can use to reason about arbitrary data structures and other logics.
+
+CTT typically comes with a basic collection of types like the booleans and the natural numbers, and it also comes with a set of operations that let us build more complex types out of simpler types. However, CTT is designed so it can be extended. You can specify your own types, so that you can reason about whatever sorts of objects you like. Here I will start with no types, and then explicitly build up all of the types that get used in the examples.
+
+There are many variants of CTT. Even Martin-L\"of developed a few different versions of his type theory over the course of his career. In what follows, I will only discuss a simple fragment that is more or less common to all variants of Martin-L\"of's type theory.
+
+
+\section{Types}
+
+In CTT, the fundamental entity is a judgment. There are a variety of judgments that we can make. One judgment is this:
+
+\begin{equation*}
+  \term{A} : \Type/
+\end{equation*}
+
+This is a judgment that $\term{A}$ is a type, where the symbol $\term{A}$ is a placeholder for any legal type. 
+
+If you like, you can think of a type as a set or collection of objects. However, it is not exactly the same thing as a mathematical set, because technically, a mathematical set has no type restrictions. The elements of a set can be incongruous items that do not match each other in type.
+
+A type, on the other hand, is a classifier of sorts. It classifies objects that are the same in kind, and puts them together under the same type. So a type is a collection of items that are all the same in kind. 
+
+An example is the set of boolean values. There are only two values --- true and false --- but both are of the same type: they are booleans. So it makes intuitive sense to say that $\Bool/$ is a type:
+
+\begin{equation*}
+  \Bool/ : \Type/
+\end{equation*}
+
+Another example are the natural numbers, $\Nat/$. Strictly speaking, zero is a natural number, and so is the successor of zero (i.e., one), and so is the successor of the successor of zero (i.e., two). Each natural number is a different, but all are the same sorts of items: they are all natural numbers. So it makes intuitive sense to think that $\Nat/$ is a type:
+
+\begin{equation*}
+  \Nat/ : \Type/
+\end{equation*}
+
+That being said, we are not limited to thinking about types as sets (whose members are all of the same kind). We can think about types in a variety of other ways:
+
+\begin{center}
+  $\term{A}$ is a type. \\
+  $\term{A}$ is a set (whose members are the same in kind). \\
+  $\term{A}$ is a problem to be solved. \\
+  $\term{A}$ is the specification of a computer program. \\
+  $\term{A}$ is a proposition.
+\end{center}
+
+One of the core philosophical ideas that underlies CTT is that all of the above turn out to be the same at deep levels.
+
+Another judgment we can make that is related to types takes this form:
+
+\begin{equation*}
+  \term{A} = \term{B} : \Type/
+\end{equation*}
+
+This judgment says that $\term{A}$ and $\term{B}$ are just different names for the same type.
+
+
+\section{The inhabitants of types}
+
+Another judgment we can make is this:
+
+\begin{equation*}
+  \term{a} : \term{A}
+\end{equation*}
+
+This is a judgment that $\term{a}$ is an inhabitant of the type $\term{A}$. There are a variety of different ways that we can read this judgment:
+
+\begin{center}
+  $\term{a}$ is an inhabitant of $\term{A}$. \\
+  $\term{a}$ is an element of the set $\term{A}$. \\
+  $\term{a}$ is a solution to the problem $\term{A}$. \\
+  $\term{a}$ is a program that computes the specified output $\term{A}$. \\
+  $\term{a}$ is a proof of the proposition $\term{A}$.
+\end{center}
+
+Another form of judgment we can make that is related to the inhabitants of types takes this shape:
+
+\begin{equation*}
+  \term{a} = \term{b} : \term{A}
+\end{equation*}
+
+This judgment says that $\term{a}$ and $\term{b}$ are different names for the same inhabitant of type $\term{A}$.
+
+
+\section{Substitution rules}
+
+In CTT, there are substitution rules that let us substitute names, if they are names for the same things. 
+
+For example, if $\term{A}$ and $\term{B}$ are names for the same type, then we can substitute one for the other:
+
+\begin{prooftree*}
+  \hypo{\term{A} = \term{B} : \Type/}
+  \hypo{\term{A} : \Type/}
+  \infer2[\SubstType/]{\term{B} : \Type/}
+\end{prooftree*}
+
+If $\term{a}$ and $\term{b}$ are names for the same inhabitant of a type, then we can substitute one for the other:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{a} = \term{b} : \term{A}}
+  \hypo{\term{a}: \term{A}}
+  \infer3[\SubstTerm/]{\term{b} : \term{A}}
+\end{prooftree*}
+
+
+\section{Uniqueness of types}
+
+In the version of type theory I will use here, objects belong to only one base type. Consider this judgment:
+
+\begin{equation*}
+ \term{a} : \term{A}
+\end{equation*}
+
+By making this judgment, we are saying that $\term{a}$ is intrinsically an object of type $\term{A}$. It is, at the very core of what it is, an $\term{A}$.
+
+Moreover, $\term{a}$ cannot belong to another base type. For instance, if $\term{a} : \term{A}$, then the following is illegal:
+
+\begin{equation*}
+  \term{a} : \term{B}
+\end{equation*}
+
+This restriction only applies to base types. As we will see, we can build up complex types out of simpler types, and we will see that the object $\term{a}$ can then be a constituent part of more complex types. So there is a sense in which $\term{a}$ can belong to more than one type.
+
+However, complex types are not base types. The restriction is that objects can only belong to one base type. This restriction is here for practical purposes. It keeps the system simpler, and gives it nicer properties.
+
+
+\section{Defining types}
+
+To define any type in CTT, we must lay down four different kinds of rules. They are these:
+
+\begin{enumerate}
+  \item{Formation rules}
+  \item{Introduction rules}
+  \item{Elimination rules}
+  \item{Computation rules}
+\end{enumerate}
+
+I will not give examples of these rules just now. Instead, I will give examples later on, when I introduce some types. At this point though, let me briefly discuss what each type of rule is for.
+
+\begin{enumerate}
+
+  \item{The formation rules stipulate when a type is well-formed. We might say that the formation rules tell us when a type is a legal type, or that they tell us what types exist in our system and when exactly it is legitimate to use them.}
+
+  \item{The introduction rules specify how we introduce inhabitants of the type. We might say that the introduction rules enumerate or spell out exactly which objects inhabit the type. So if the formation rules tell us which types there are in the system, the introduction rules tell us which objects inhabit those types.}
+
+  \item{The elimination rules specify how to iterate over every inhabitant of a type, and compute some further value for each inhabitant. This is a general induction principle, and at the same time a way to define total functions.}
+
+  \item{The computation rules specify how to compute functions defined through an elimination rule. The elimination rule is a static rule that tells us how to define the function, but the computation rules are dynamic, computational rules, that tell us how to compute values with those functions.}
+
+\end{enumerate}
+
+If we specify all of these rules for a type, then we have fully defined the type. A type must have explicit rules that tell us how to form the type, we must have explicit rules that tell us which objects inhabit the type, we must have explicit rules that tell us how to define functions over the type, and we must have explicit rules that tell us how to compute answers using those functions.
+
+It is worth noting that in CTT, we do not need to ``interpret'' any of its symbols relative to a model. The semantics of every type gets entirely baked in. These four types of rules are designed to provide all the information that we need to work with a type, so there is no need for a separate realm of interpretation and models.
+
+
+\section{Finite type formation}
+
+A very simple type is a finite type, which has a finite and definite set of inhabitants. To define a finite type, we first must specify formation rules. For example, here is the formation rule for the boolean type $\Bool/$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+\end{prooftree*}
+
+Formation rules are written as inference rules. We write any premises or preconditions above the line, and we put the conclusion or result below the line. In this case, there is nothing written above the line, so we can conclude that $\Bool/$ is a type that is based on no other types.
+
+Another way to think of this is to say that the $\Bool/$ type is a given base type, which is not built from any other types. If we wanted to form a complex type, we would have to build it from other, simpler types. For example, suppose we want to combine a type $\term{A}$ and a type $\term{B}$ into the product type $\term{A} \times \term{B}$. The formation rule would look like this:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{B} : \Type/}
+  \infer2[$\times$-$\Form/$]{\term{A} \times \term{B}}
+\end{prooftree*}  
+
+Here we can see that there are types above the line, which means that we can form the type $\term{A} \times \term{B}$ only if $\term{A}$ is itself a type and $\term{B}$ is itself a type.
+
+But for $\Bool/$, we have nothing written above the line, so $\Bool/$ is a simple base type, which is not constructed out of any other types. 
+
+We can define any other finite type in similar ways. For example, suppose we want to set up a type for phone number extensions, called $\term{Ext}$. We can put together a similar formation rule for this type:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+\end{prooftree*}
+
+This says that $\term{Ext}$ is a base type that can be used in our system, and that it is constructed from no other types.
+
+Similarly, suppose we want to set up a type for the employees in a company, called $\term{Em}$. Here is the formation rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+\end{prooftree*}
+
+This too says that $\term{Em}$ is a base type that is available for use in the system, and it is not constructed from any other types.
+ 
+
+\section{Finite type introduction}
+
+After we define the formation rules for a type, we must define the introduction rules for the inhabitants of the type. There can be as many introduction rules as we like, but altogether they must tell us how to construct each and every inhabitant of a type.
+
+For finite types, this is easy, because we simply enumerate each one. For example, the boolean type $\Bool/$ has two inhabitants: $\true/$ (which is an abbreviation for ``true'') and $\false/$ (for ``false''). So, we set down a separate introduction for each of these:
+
+$$
+\begin{prooftree}
+  \hypo{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+\end{prooftree}
+\hskip 1.5cm
+\begin{prooftree}
+  \hypo{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+\end{prooftree}
+$$
+
+The first of these rules says that if $\Bool/$ is a legal type, then $\true/$ inhabits that type. The second says that if $\Bool/$ is a legal type, then $\false/$ inhabits that type.
+
+Notice that we can chain together the formation rules and the introduction rules to offer a complete proof or derivation of each of these inhabitants:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+\end{prooftree}
+\hskip 1.5cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+\end{prooftree}
+$$
+
+The derivation on the left starts with no assumptions are preconditions above the line, and it uses the \BoolF/ rule to conclude that $\Bool/$ is a legal type. Then, using that as a premise, it uses the $\true/$-$\Intro/$ rule to conclude that $\true/$ inhabits that type. The derivation on the right is similar, except it derives that $\false/$ inhabits the type $\Bool/$.
+
+We can specify the inhabitants of any other finite type in just the same way: you simply enumerate each inhabitant by constructing a separate introduction rule for it. For example, suppose that there are two employees, Alice and Bob. Here are their introduction rules:
+
+$$
+\begin{prooftree}
+  \hypo{\term{Em} : \Type/}
+  \infer1[$\term{Alice}$-$\Intro/$]{\term{Alice} : \term{Em}}
+\end{prooftree}
+\hskip 1.5cm
+\begin{prooftree}
+  \hypo{\term{Em} : \Type/}
+  \infer1[$\term{Bob}$-$\Intro/$]{\term{Bob} : \term{Em}}
+\end{prooftree}
+$$
+
+Similarly, let us suppose that there are three phone extensions, $\term{x11}$, $\term{x12}$, and $\term{x13}$. Here are their introduction rules:
+
+$$
+\begin{prooftree}
+  \hypo{\term{Ext} : \Type/}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{x11} : \term{Ext}}
+\end{prooftree}
+\hskip 1cm
+\begin{prooftree}
+  \hypo{\term{Ext} : \Type/}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{x12} : \term{Ext}}
+\end{prooftree}
+\hskip 1cm
+\begin{prooftree}
+  \hypo{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+\end{prooftree}
+$$
+
+The first rule says that if $\term{Ext}$ is a legal type, then $\term{x11}$ inhabits it. The second and third rules are similar, but for $\term{x12}$ and $\term{x13}$. 
+
+As another example, suppose we have another finite type for office rooms, which we'll call $\term{Rm}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Rm}$-$\Form/$]{\term{Rm} : \Type/}
+\end{prooftree*}
+
+Suppose there are three rooms, $\term{r01}$, $\term{r02}$, and $\term{r03}$. Here are introduction rules for each one:
+
+$$
+\begin{prooftree}
+  \hypo{\term{Rm} : \Type/}
+  \infer1[$\term{r01}$-$\Intro/$]{\term{r01} : \term{Rm}}
+\end{prooftree}
+\hskip 0.5cm
+\begin{prooftree}
+  \hypo{\term{Rm} : \Type/}
+  \infer1[$\term{r02}$-$\Intro/$]{\term{r02} : \term{Rm}}
+\end{prooftree}
+\hskip 0.5cm
+\begin{prooftree}
+  \hypo{\term{Rm} : \Type/}
+  \infer1[$\term{r03}$-$\Intro/$]{\term{r03} : \term{Rm}}
+\end{prooftree}
+$$
+
+To construct the inhabitants of finite types like those mentioned above, we have to manually specify each and every one that we want in the type. But we might also want a type with an unlimited number of inhabitants. For that, we can lay down recursive introduction rules, that tell us how to construct any given inhabitant of that type.
+
+For example, here are the introduction rules for the natural numbers:
+
+$$
+\begin{prooftree}
+  \hypo{\Nat/ : \Type/}
+  \infer1[$\term{0}$-$\Intro/$]{\term{0} : \Nat/}
+\end{prooftree}
+\hskip 1.5cm
+\begin{prooftree}
+  \hypo{\Nat/ : \Type/}
+  \hypo{\term{n} : \Nat/}
+  \infer2[$\term{succ}$-$\Intro/$]{\term{succ(n)} : \Nat/}
+\end{prooftree}
+$$
+
+The rule on the left says that if $\Nat/$ is a legal type, then zero is an inhabitant of that type. The rule on the right is more complex. It says that, so long as $\Nat/$ is a legal type, if we also have some object $\term{n}$ that inhabits $\Nat/$, then the successor $\term{succ(n)}$ is also an inhabitant of $\Nat/$. 
+
+Using these rules, we can see how to construct any element of $\Nat/$. To start, we can use the $\term{0}$-$\Intro/$ rule to construct zero:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\NatF/]{\Nat/ : \Type/}
+  \infer1[$\term{0}$-$\Intro/$]{\term{0} : \Nat/}
+\end{prooftree*}
+
+Then we can take that, and use the $\term{succ}$-$\Intro/$ rule to form the successor of zero (which is one):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\NatF/]{\Nat/ : \Type/}
+  \hypo{}
+  \infer1[\NatF/]{\Nat/ : \Type/}
+  \infer1[$\term{0}$-$\Intro/$]{\term{0} : \Nat/}
+  \infer2[$\term{succ}$-$\Intro/$]{\term{succ(0)} : \Nat/}
+\end{prooftree*}
+
+Then we can use the $\term{succ}$-$\Intro/$ rule again to form the successor of the successor of zero (which is two):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\NatF/]{\Nat/ : \Type/}
+  \hypo{}
+  \infer1[\NatF/]{\Nat/ : \Type/}
+  \hypo{}
+  \infer1[\NatF/]{\Nat/ : \Type/}
+  \infer1[$\term{0}$-$\Intro/$]{\term{0} : \Nat/}
+  \infer2[$\term{succ}$-$\Intro/$]{\term{succ(0)} : \Nat/}
+  \infer2[$\term{succ}$-$\Intro/$]{\term{succ(succ(0))} : \Nat/}
+\end{prooftree*}
+
+Of course, there is an unending supply of natural numbers here, but the two introduction rules are complete because they show us how to construct each and every inhabitant. Using these rules, we can always construct another number (namely, the successor of the one before). 
+
+
+\section{Selectors}
+
+In CTT, elimination rules use a special device called a selector. A selector is like a function or a program that says: if you give me an object from type $\term{A}$, I will select an object from $\term{B}$ and return that to you.
+
+
+\subsection{Switches.}
+
+For finite types, we can think of a selector as a case switch. Suppose we have a type $\term{A}$, which has three inhabitants, $\term{a_{1}}$, $\term{a_{2}}$, and $\term{a_{3}}$. Suppose we also have another type, $\term{B}$, which has only two inhabitants, $\term{b_{1}}$ and $\term{b_{2}}$.
+
+Here is one possible case switch:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : A)}: \\
+  \term{case~1}~&\term{(if~x~is~a_{1}) : return~b_{1} : B} \\
+  \term{case~2}~&\term{(if~x~is~a_{2}) : return~b_{2} : B} \\
+  \term{case~3}~&\term{(if~x~is~a_{3}) : return~b_{1} : B}
+\end{align*}
+
+This takes an object of type $\term{A}$ and returns an object from type $\term{B}$. But which item from $\term{B}$ it returns depends on which item of $\term{A}$ we give it. If we give it $\term{a_{1}}$, it will give us back $\term{b_{1}}$. If we hive it $\term{a_{3}}$, it will also give us back $\term{b_{1}}$. If we give it $\term{a_{2}}$, it will give us back $\term{b_{2}}$.
+
+This is just one example of selecting objects of type $\term{B}$, given an object of type $\term{A}$. The selector mechanism does not force us to use any particular assignment. As users of the system, we get to specify which objects from $\term{B}$ we want to assign to which objects of $\term{A}$. 
+
+Here is another possible switch that we could put together:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : A)}: \\
+  \term{case~1}~&\term{(if~x~is~a_{1}) : return~b_{2} : B} \\
+  \term{case~2}~&\term{(if~x~is~a_{2}) : return~b_{2} : B} \\
+  \term{case~3}~&\term{(if~x~is~a_{3}) : return~b_{2} : B}
+\end{align*}
+
+This one selects the same object from $\term{B}$ for every case of $\term{A}$. Any possible assignment of objects from $\term{B}$ to $\term{A}$ is a legal selector.
+
+I should note that we can pick any type for the second type. It need not be $\term{B}$. We might choose to select objects from $\term{C}$ for every case of $\term{A}$, or objects of $\term{D}$, and so on. 
+
+We can even select objects from the same type for every case of $\term{A}$. Here is an example of a switch that assigns to every object of $\term{A}$ another object of $\term{A}$:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : A)}: \\
+  \term{case~1}~&\term{(if~x~is~a_{1}) : return~a_{3} : A} \\
+  \term{case~2}~&\term{(if~x~is~a_{2}) : return~a_{2} : A} \\
+  \term{case~3}~&\term{(if~x~is~a_{3}) : return~a_{1} : A}
+\end{align*}
+
+In principle, we can construct any switch over $\term{A}$ that we like, provided that we can cover every case of $\term{A}$. (We will see examples later where we cannot construct a switch over $\term{A}$, because we cannot cover every case of $\term{A}$.)
+
+
+\subsection{Elimination rule template.}
+
+In CTT, we do not write switches in the way I wrote them above. Instead, we write them down in two steps. First, we construct an elimination rule, and second we construct computation rules.
+
+To construct the elimination rule, we first compress the switch's inputs and outputs into a compact expression that has this shape:
+
+\begin{equation*}
+  \term{switch(x : A, option~1 : B, option~2 : B, \ldots) : B}
+\end{equation*}
+
+The first parameter to the $\term{switch}$ statement is $\term{x} : \term{A}$, which indicates that we are switching over objects of type $\term{A}$. The remaining parameters to the $\term{switch}$ statement list out (in order) the outputs for each case. Finally, on the far right, after the last colon, we stipulate the type of the switch's output (namely $\term{B}$). 
+
+Of course, for any of this to make sense, $\term{x}$ must be a valid inhabitant of $\term{A}$, and each of $\term{option~1}$, $\term{option~2}$, $\ldots$ must be valid inhabitants of $\term{B}$. The elimination rule for $\term{A}$ makes this explicit:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Elim/$]{\term{switch(x : A, option~1 : B, option~2 : B, \ldots) : B}}
+\end{prooftree*}
+
+There is a lot of redundant information in the switch statement, so we can drop the type annotations on the parameters:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Elim/$]{\term{switch(x, option~1, option~2, \ldots) : B}}
+\end{prooftree*}
+
+
+\subsection{Computation rules}
+
+Once we have formed the elimination rule, we then need to specify separately how the $\term{switch}$ statement works. To do this, we explicitly list out what the switch statement should return for each case of $\term{A}$. Let us denote the inhabitants of type $\term{A}$ as $\term{a_{1}}$, $\term{a_{2}}$, and so on. Then we can write out a separate rule for each case of $\term{A}$:
+
+\begin{align*}
+  \term{switch(a_{1}, option~1, option~2, \ldots)} &= \term{option~1} : \term{B} \\
+  \term{switch(a_{2}, option~1, option~2, \ldots)} &= \term{option~2} : \term{B} \\
+  &\ldots
+\end{align*}
+
+The first line says that, if $\term{x}$ is $\term{a_{1}}$, then the switch statement outputs or is equivalent to $\term{option~1}$ of type $\term{B}$. The second line says that, if $\term{x}$ is $\term{a_{2}}$, then the switch statement outputs or is equivalent to $\term{option~2}$ of type $\term{B}$. And so on for all the other cases of $\term{A}$. In this way, we explicitly write out how to evaluate each case. 
+
+Again, these statements only make sense if $\term{a_{1}}$ is a valid inhabitant of type $\term{A}$, and each of $\term{option~1}$, $\term{option~2}$, and so on are valid inhabitants of type $\term{B}$. We make this explicit by putting each of these computation rules into a separate rule. 
+
+Here is the full version of the first computation rule listed above:
+
+\begin{prooftree*}
+  \hypo{\term{a_{1}} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{1}$]{\term{switch(a_{1}, option~1, option~2, \ldots) = option~1 : B}}
+\end{prooftree*}
+
+This says that, so long as $\term{a_{1}}$ is a valid inhabitant of type $\term{A}$, and so long as each of $\term{option~1}$, $\term{option~2}$, and so on are valid inhabitants of type $\term{B}$, then the switch statement $\term{switch(a_{1}, option~1, option~2, \ldots)}$ evaluates to (or is just another name for) $\term{option~1}$ of type $\term{B}$.
+
+Here is the full version of the second computation listed above:
+
+\begin{prooftree*}
+  \hypo{\term{a_{2}} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{1}$]{\term{switch(a_{2}, option~1, option~2, \ldots) = option~2 : B}}
+\end{prooftree*}
+
+
+\subsection{Substitution}
+
+In their conclusions, the computation rules express an equality. They say that the switch statement is the same name as an inhabitant of $\term{B}$. For example, take the first computation rule:
+
+\begin{prooftree*}
+  \hypo{\term{a_{1}} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{1}$]{\term{switch(a_{1}, option~1, option~2, \ldots) = option~1 : B}}
+\end{prooftree*}
+
+This says that the switch statement $\term{switch(a_{1}, option~1, option~2, \ldots)}$ is just another name for the item $\term{option~1}$ of type $\term{B}$. 
+
+We can use the substitution rules to extract just the computed value, namely $\term{option~1} : \term{B}$. In particular, we can use \SubstTerm/, like this:
+
+\begin{prooftree*}
+  \hypo{\term{a_{1}} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{1}$]{\term{switch(a_{1}, option~1, option~2, \ldots) = option~1 : B}}
+  
+  \hypo{\term{option~1} : \term{B}}
+  \infer2[\SubstTerm/]{\term{option~1} : \term{B}}
+\end{prooftree*}
+
+Similarly, if we use the second computation rule, we can extract the result in the same way:
+
+\begin{prooftree*}
+  \hypo{\term{a_{2}} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{2}$]{\term{switch(a_{2}, option~1, option~2, \ldots) = option~2 : B}}
+  
+  \hypo{\term{option~2} : \term{B}}
+  \infer2[\SubstTerm/]{\term{option~2} : \term{B}}
+\end{prooftree*}
+
+
+\subsection{Derivations}
+
+The full elimination and computation rules require that the inhabitants and types they switch over are valid objects in the system. So, the required types and inhabitants appear as premises in the inference rules. 
+
+But of course, those premises must be derived from introduction and formation rules in the system too. If we fill out the derivation steps for the premises as well, and then if we fill out the derivation steps for whatever their premises are, and so on until we have fully fleshed out everything, then we end up with a full derivation.
+
+Take the computation of the first value of the switch above$\term{option~2}$ from the switch above:
+
+\begin{prooftree*}
+  \hypo{\term{a_{2}} : \term{A}}
+  \hypo{\term{option~1} : \term{B}}
+  \hypo{\term{option~2} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{2}$]{\term{switch(a_{2}, option~1, option~2, \ldots) = option~2 : B}}
+  
+  \hypo{\term{option~2} : \term{B}}
+  \infer2[\SubstTerm/]{\term{option~2} : \term{B}}
+\end{prooftree*}
+
+To save space, I will write $\term{o_{1}}$, $\term{o_{2}}$, and so on in place of $\term{option~1}$, $\term{option~2}$, etc.:
+
+\begin{prooftree*}
+  \hypo{\term{a_{2}} : \term{A}}
+  \hypo{\term{o_{1}} : \term{B}}
+  \hypo{\term{o_{2}} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{2}$]{\term{switch(a_{2}, o_{1}, o_{2}, \ldots) = o_{2} : B}}
+  
+  \hypo{\term{o_{2}} : \term{B}}
+  \infer2[\SubstTerm/]{\term{o_{2}} : \term{B}}
+\end{prooftree*}
+
+In order to fully flesh out this derivation, we need to show that all of the premises are valid in the system. So, for example, we would need to show that $\term{a_{2}}$ is a valid inhabitant of $\term{A}$ by using its introduction rule:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \infer1[$\term{a_{2}}$-$\Intro/$]{\term{a_{2}} : \term{A}}
+  \hypo{\term{o_{1}} : \term{B}}
+  \hypo{\term{o_{2}} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{2}$]{\term{switch(a_{2}, o_{1}, o_{2}, \ldots) = o_{2} : B}}
+  
+  \hypo{\term{o_{2}} : \term{B}}
+  \infer2[\SubstTerm/]{\term{o_{2}} : \term{B}}
+\end{prooftree*}
+
+Now we have shown that $\term{a_{2}}$ is a valid inhabitant of $\term{A}$, provided that $\term{A}$ is a valid type. So, we need to show that $\term{A}$ is a valid type too. We would have to do that with its formation rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{A}$-$\Form/$]{\term{A} : \Type/}
+  \infer1[$\term{a_{2}}$-$\Intro/$]{\term{a_{2}} : \term{A}}
+  \hypo{\term{o_{1}} : \term{B}}
+  \hypo{\term{o_{2}} : \term{B}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{2}$]{\term{switch(a_{2}, o_{1}, o_{2}, \ldots) = o_{2} : B}}
+  
+  \hypo{\term{o_{2}} : \term{B}}
+  \infer2[\SubstTerm/]{\term{o_{2}} : \term{B}}
+\end{prooftree*}
+
+Now we have fully shown that $\term{a_{2}}$ is a valid type in the system, and so it can be used in the switch. We must also show that all of the other objects in play are valid too. Here is what a fully fleshed out derivation tree would look like:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{A}$-$\Form/$]{\term{A} : \Type/}
+  \infer1[$\term{a_{2}}$-$\Intro/$]{\term{a_{2}} : \term{A}}
+
+  \hypo{}
+  \infer1[$\term{B}$-$\Form/$]{\term{B} : \Type/}
+  \infer1[$\term{o_{1}}$-$\Intro/$]{\term{o_{1}} : \term{B}}
+
+  \hypo{}
+  \infer1[$\term{B}$-$\Form/$]{\term{B} : \Type/}
+  \infer1[$\term{o_{2}}$-$\Intro/$]{\term{o_{2}} : \term{B}}
+
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{2}$]{\term{switch(a_{2}, o_{1}, o_{2}, \ldots) = o_{2} : B}}
+  
+  \hypo{}
+  \infer1[$\term{B}$-$\Form/$]{\term{B} : \Type/}
+  \infer1[$\term{o_{2}}$-$\Intro/$]{\term{o_{2}} : \term{B}}
+  \infer2[\SubstTerm/]{\term{o_{2}} : \term{B}}
+\end{prooftree*}
+
+
+\section{Selector examples}
+
+Let us construct some switches over the employee type $\term{Em}$ that we defined earlier. There are two inhabitants of the type: $\term{Alice}$ and $\term{Bob}$. 
+
+Suppose we want to assign a phone extension to each of them. For instance, like this:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : Em)}: \\
+  \term{case~1}~&\term{(if~x~is~Alice) : return~x11 : Ext} \\
+  \term{case~2}~&\term{(if~x~is~Bob) : return~x12 : Ext}
+\end{align*}
+
+In other words, we want to assign the extension $\term{x11}$ to $\term{Alice}$, and $\term{x12}$ to $\term{Bob}$. We can convert this into an elimination rule, by following the template above. 
+
+To use the template, we need to substitute our own values in place of the values for the types and inhabitants of $\term{A}$ and $\term{B}$. We will use the type $\term{Em}$ in place of $\term{A}$, with $\term{Alice}$ and $\term{Bob}$ in place of $\term{a_{1}}$ and $\term{a_{2}}$. We will use the type $\term{Ext}$ in place of $\term{B}$, with $\term{x11}$ and $\term{x12}$ in place of $\term{option~1}$ and $\term{option~2}$.
+
+Here is the elimination rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}}
+  \hypo{\term{x11} : \term{Ext}}
+  \hypo{\term{x12} : \term{Ext}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x11, x12)} : \term{Ext}}
+\end{prooftree*}
+
+And here are the computation rules:
+
+\begin{prooftree*}
+  \hypo{\term{Alice} : \term{Em}}
+  \hypo{\term{x11} : \term{Ext}}
+  \hypo{\term{x12} : \term{Ext}}
+  \infer3[$\term{Em}$-$\Eq/_{1}$]{\term{switch(Alice, x11, x12)} = \term{x11} : \term{Ext}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\term{Bob} : \term{Em}}
+  \hypo{\term{x11} : \term{Ext}}
+  \hypo{\term{x12} : \term{Ext}}
+  \infer3[$\term{Em}$-$\Eq/_{2}$]{\term{switch(Bob, x11, x12)} = \term{x12} : \term{Ext}}
+\end{prooftree*}
+
+Using this, we can construct a full derivation to show that, using this particular switch, Alice's extension is $\term{x11}$. 
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \infer1[$\term{Alice}$-$\Intro/$]{\term{Alice} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{x11} : \term{Ext}}
+
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{x12} : \term{Ext}}
+
+  \infer3[$\term{Em}$-$\Eq/_{1}$]{\term{switch(Alice, x11, x12)} = \term{x11} : \term{Ext}}
+
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{x11} : \term{Ext}}
+  \infer2[\SubstTerm/]{\term{x11} : \term{Ext}}
+\end{prooftree*}
+
+If we wanted to, we could also define a different switch. For example, maybe we want to assign $\term{x12}$ to $\term{Alice}$ and $\term{x13}$ to $\term{Bob}$. Given that particular assignment of extensions to employees, we could show that Bob's extension is $\term{x13}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \infer1[$\term{Alice}$-$\Intro/$]{\term{Alice} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{x12} : \term{Ext}}
+
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+
+  \infer3[$\term{Em}$-$\Eq/_{1}$]{\term{switch(Alice, x12, x13)} = \term{x12} : \term{Ext}}
+
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+  \infer2[\SubstTerm/]{\term{x13} : \term{Ext}}
+\end{prooftree*}
+
+As a final example, let us construct a switch over the boolean values, which assigns to each boolean value its opposite value. Like this:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : \Bool/)}: \\
+  \term{case~1}~&\term{(if~x~is~\true/) : return~\false/ : \Bool/} \\
+  \term{case~2}~&\term{(if~x~is~\false/) : return~\true/ : \Bool/}
+\end{align*}
+
+From that, we can generate the elimination and computation rules. Here is the elimination rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \Bool/}
+  \hypo{\false/ : \Bool/}
+  \hypo{\true/ : \Bool/}
+  \infer3[\BoolE/]{\term{switch(x, \false/, \true/)} : \Bool/}
+\end{prooftree*}
+
+Here are the computation rules:
+
+\begin{prooftree*}
+  \hypo{\true/ : \Bool/}
+  \hypo{\false/ : \Bool/}
+  \hypo{\true/ : \Bool/}
+  \infer3[$\Bool/$-$\Eq/_{1}$]{\term{switch(\true/, \false/, \true/)} = \false/ : \Bool/}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\false/ : \Bool/}
+  \hypo{\false/ : \Bool/}
+  \hypo{\true/ : \Bool/}
+  \infer3[$\Bool/$-$\Eq/_{2}$]{\term{switch(\false/, \false/, \true/)} = \true/ : \Bool/}
+\end{prooftree*}
+
+With that, we can now show that, if we start with $\true/$, we get its opposite value, namely $\false/$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \infer3[$\Bool/$-$\Eq/_{2}$]{\term{switch(\true/, \false/, \true/)} = \false/ : \Bool/}
+  
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+  \infer2[\SubstTerm/]{\false/ : \Bool/}
+\end{prooftree*}
+
+
+
+\section{Abstraction and application}
+
+We can form functions and then compute with them by using abstraction and application from the typed lambda calculus. Abstraction and application formalize the process of rewriting strings and symbols.
+
+
+\subsection{Abstraction and application.}
+
+Suppose that every week, I purchase 3 lbs of dried corn. This week, the cost is 15\$ per pound. I might jot down the formula on a piece of paper:
+
+\begin{equation*}
+  \term{3~lbs~\times~15~USD:Cost}
+\end{equation*}
+
+This expression tells me that multiplying $\term{3}$ (which is a unit of type $\term{lbs}$) by $\term{15}$ (which is a unit of type $\term{USD}$) will give me the total cost (so the resulting value is of type $\term{Cost}$).
+
+Suppose now that the price changes each week. To remind me how to perform the new calculation each week, I could mark ``$\term{15}$'' as a value that should be replaced by a new $\term{USD}$ value:
+
+\begin{equation*}
+  \text{Replace $\term{15}$ with new $\term{USD}$ value in: } \term{(3~lbs~\times~15~USD)}
+\end{equation*}
+
+What is the type of this? This expression does not give me a $\term{Cost}$. Rather it tells me how to calculate a $\term{Cost}$, given a $\term{USD}$. So it is a function from $\term{USD}$ to $\term{Cost}$:
+
+\begin{equation*}
+  \text{Replace $\term{15}$ with new $\term{USD}$ value in: } \term{(3~lbs~\times~15~USD):USD \rightarrow Cost}
+\end{equation*}
+
+Then, each week, I could specify what new value I should replace it with. For instance, if the price per pound becomes $\term{17~USD}$, I would write:
+
+\begin{equation*}
+  \text{Replace $\term{15}$ with new $\term{USD}$ value $\term{17}$ in: } \term{(3~lbs~\times~15~USD)}
+\end{equation*}
+
+What is the type of this? Well, now I have stipulated a new $\term{USD}$ value to use, so this will give me an actual $\term{Cost}$:
+
+\begin{equation*}
+  \text{Replace $\term{15}$ with new $\term{USD}$ value $\term{17}$ in: } \term{(3~lbs~\times~15~USD):Cost}
+\end{equation*}
+
+If I go in and actually do the replacement, the rewritten formula then becomes:
+
+\begin{equation*}
+  \term{3~lbs~\times~17~USD:Cost}
+\end{equation*}
+
+The typed lambda calculus formalizes this process. Marking a symbol as replaceable is called abstraction. I will mark the replaceable symbol with a $\abstrBinder/$ (e.g., $\abstrBinder/ 15$), and specify its type (e.g., $\abstrBinder/ 15 : \$$). Hence, this:
+
+\begin{equation*}
+  \text{Replace $\term{15}$ with new $\term{USD}$ value in: } \term{(3~lbs~\times~15~USD):USD \rightarrow Cost}
+\end{equation*}
+
+becomes this:
+
+\begin{equation*}
+  \abstr{15}{USD}{(3~lbs~\times~15~USD): USD \rightarrow Cost}
+\end{equation*}
+
+Specifying a replacement value is called application. Often the specified replacement is written after the original formula. In that. case, this:
+
+\begin{equation*}
+  \text{Replace $\term{15}$ with new $\term{USD}$ value $\term{17}$ in: } \term{(3~lbs~\times~15~USD):Cost}
+\end{equation*}
+
+becomes this:
+
+\begin{equation*}
+  \abstr{15}{USD}{(3~lbs~\times~15~USD)}~\term{17} : \term{Cost}
+\end{equation*}
+
+However, to make the application more visible, I will write it like this:
+
+\begin{equation*}
+  \app{\abstr{15}{USD}{(3~lbs~\times~15~USD)}}{17} : \term{Cost}
+\end{equation*}
+
+The process of actually rewriting the original expression with the new value is called $\beta$-reduction. I will write it with a squiggly arrow, like this:
+
+\begin{equation*}
+  \app{\abstr{15}{USD}{(3~lbs~\times~15~USD)}}{17} : \term{Cost} \hskip 0.25cm \rightsquigarrow \hskip 0.25cm \term{3~lbs~\times~17~USD} : \term{Cost}
+\end{equation*}
+
+I will also sometimes write it like this:
+
+\begin{equation*}
+  \term{(3~lbs~\times~15~USD)[15 := 17]} : \term{Cost}
+\end{equation*}
+
+Writing ``$\term{[15 := 17]}$'' after ``$\term{(3~lbs~\times~15~USD)}$'' denotes the expression that we get after we replace every occurrence of ``$\term{15}$'' with ``$\term{17}$'' in ``$\term{(3~lbs~\times~15~USD)}$''.
+
+
+\subsection{Abstraction and application rules.}
+
+Suppose I have a derivation tree that results in some judgment. To use some placeholders, let us suppose that we obtain the judgment that some object $\term{b}$ is of type $\term{B}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer[no rule]1{}
+\end{prooftree*}
+
+Suppose also that at the top of one of the leaves of the derivation tree, there is an inhabitant of some other type. To use placeholders again, suppose one of the leaves starts with the object $\term{x}$ of type $\term{A}$:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer[no rule]1{}
+\end{prooftree*}
+
+If I am in this situation, then I can mark $\term{x}$ as replaceable, using lambda abstraction:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer1[]{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+\end{prooftree*}
+
+This forms a template for a $\abstrBinder/$ introduction rule, which I will denote as \abstrI/:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer1[\abstrI/]{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+\end{prooftree*}
+
+To indicate that we have bound $\term{x} : \term{A}$ to the new lambda expression, I will mark the bound expression with a unique label (I will just use numbers):
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}^{1}}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+\end{prooftree*}
+
+Of course, this is only going to be valid if $\term{A}$ and $\term{B}$ are valid types in the system, and if $\term{x}$ is a valid inhabitant of $\term{A}$. So we have a formation rule that tells us when $\term{A \rightarrow B}$ is a valid type:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{B} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \infer3[\abstrF/]{\term{A \rightarrow B} : \Type/}
+\end{prooftree*}
+
+If I have an abstraction, I can apply it to a value. This allows us to from a $\abstrBinder/$ elimination rule:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+  \hypo{\term{x} : \term{A}}
+  \infer2[\abstrE/]{\app{\abstr{x}{A}{b}}{a} : \term{B}}
+\end{prooftree*}
+
+And $\beta$-reduction gives us a computation rule:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+  \hypo{\term{x} : \term{A}}
+  \infer2[\abstrEq/]{\app{\abstr{x}{A}{b}}{a} = \term{b[x := a]} : \term{B}}
+\end{prooftree*}
+
+If we have an application like this, we can then us substitution to get the computed value:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+  \hypo{\term{x} : \term{A}}
+  \infer2[\abstrEq/]{\app{\abstr{x}{A}{b}}{a} = \term{b[x := a]} : \term{B}}
+  \hypo{\term{b} : \term{B}}
+  \infer2[\SubstTerm/]{\term{b[x := a]} : \term{B}}
+\end{prooftree*}
+
+Here is a full derivation that combines the \abstrI/, \abstrE/, and \SubstTerm/ rules:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{A}$-$\Form/$]{\term{A} : \Type/}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \term{A}^{1}}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer1[\abstrI/]{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+
+  \hypo{}
+  \infer1[$\term{A}$-$\Form/$]{\term{A} : \Type/}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \term{A}}
+  \infer2[\abstrEq/]{\app{\abstr{x}{A}{b}}{a} = \term{b[x := a]} : \term{B}}
+
+  \hypo{}
+  \infer1[$\term{B}$-$\Form/$]{\term{B} : \Type/}
+  \infer1[$\term{b}$-$\Intro/$]{\term{b} : \term{B}}
+  \infer2[\SubstTerm/]{\term{b[x := a]} : \term{B}}
+\end{prooftree*}
+
+
+\subsection{Examples.}
+
+Consider the derivation from above which switches boolean values:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \infer3[\BoolE/]{\term{switch(\true/, \false/, \true/)} : \Bool/}
+\end{prooftree*}
+
+This is a useful derivation, and we might want to use it for the other boolean value. We could do that by copying the whole thing, and then replacing every instance of the assumption $\true/ : \Bool/$ that appears at the top left with the other value of $\Bool/$, namely $\false/ : \Bool/$. 
+
+But we can also just use abstraction and mark that top left assumption as replaceable. So, let's mark every occurrence of the term $\true/ : \Bool/$ from the top left as an $\term{x}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \infer3[\BoolE/]{\term{switch(\term{x}, \false/, \true/)} : \Bool/}
+\end{prooftree*}
+
+This way we can clearly see which occurrences are replaceable. Now, let's use the \abstrI/ rule to do generate the abstraction:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \Bool/^{1}}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \infer3[\BoolE/]{\term{switch(\term{x}, \false/, \true/)} : \Bool/}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{\Bool/}{\term{switch(\term{x}, \false/, \true/)}} : \Bool/ \rightarrow \Bool/}
+\end{prooftree*}
+
+Now we have a function that can take any value of type $\Bool/$, and put it into the switch. To save space, let us use the term $\term{g}$ as an abbreviation for the full lambda expression:
+
+\begin{equation*}
+  \term{g} \equiv \abstr{x}{\Bool/}{\term{switch(\term{x}, \false/, \true/)}}
+\end{equation*}
+
+The derivation is now:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \Bool/^{1}}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \infer3[\BoolE/]{\term{switch(\term{x}, \false/, \true/)} : \Bool/}
+  \infer1[\abstrI/$^{1}$]{\term{g} : \Bool/ \rightarrow \Bool/}
+\end{prooftree*}
+
+Let us apply the function to $\false/$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \Bool/^{1}}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}
+
+  \infer3[\BoolE/]{\term{switch(\term{x}, \false/, \true/)} : \Bool/}
+  \infer1[\abstrI/$^{1}$]{\term{g} : \Bool/ \rightarrow \Bool/}
+  
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\false/$-$\Intro/$]{\false/ : \Bool/}
+
+  \infer2[\abstrEq/]{\app{\term{g}}{\false/} = \term{switch(\false/, \false/, \true/)}: \Bool/}
+\end{prooftree*}
+
+We can then use substitution:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1[\abstrEq/]{\app{\term{g}}{\false/} = \term{switch(\false/, \false/, \true/)}: \Bool/}
+  
+  \hypo{}
+  \ellipsis{}{}
+  \infer1[\BoolE/]{\term{switch(\false/, \false/, \true/)}: \Bool/}
+  
+  \infer2[\SubstTerm/]{\term{switch(\false/, \false/, \true/)} : \Bool/}
+\end{prooftree*}
+
+And we can use the computation rules to get a value:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1[\SubstTerm/]{\term{switch(\false/, \false/, \true/)} : \Bool/}
+  \infer1[$\Bool/$-$\Eq/_{2}$]{\term{switch(\false/, \false/, \true/)} = \true/ : \Bool/}
+\end{prooftree*}
+
+Finally, we can use substitution again to get the final result:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1[\SubstTerm/]{\term{switch(\false/, \false/, \true/)} : \Bool/}
+  \infer1[$\Bool/$-$\Eq/_{2}$]{\term{switch(\false/, \false/, \true/)} = \true/ : \Bool/}
+
+  \hypo{}
+  \infer1[\BoolF/]{\Bool/ : \Type/}
+  \infer1[$\true/$-$\Intro/$]{\true/ : \Bool/}  
+  
+  \infer2[\SubstTerm/]{\true/ : \Bool/}
+\end{prooftree*}
+
+We could use the same technique to construct functions for any of the switches we built earlier. For example:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}^{1}}
+  \ellipsis{}{}
+  \infer1[$\term{Em}$-$\Elim/$]{\term{switch(x, x11, x12)} : \term{Ext}}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{Em}{\term{switch(x, x11, x12)}} : \term{Em} \rightarrow \term{Ext}}
+\end{prooftree*}
+
+
+\subsection{Function space.}
+
+Arrow types with the shape $\term{A \rightarrow B}$ are function types. The inhabitants of the type $\term{A \rightarrow B}$ are all functions that map elements from $\term{A}$ to elements of $\term{B}$.
+
+For example, above we constructed a number of switches, and if we use the \abstrI/ rule on each one, we get a function that maps employees to extensions. Consider the last example:
+
+\begin{equation*}
+  \abstr{x}{Em}{\term{switch(x, x11, x12)}} : \term{Em} \rightarrow \term{Ext}
+\end{equation*}
+
+We can write this function in the more traditional way. Let us assign the name $\term{h}$ to the function:
+
+\begin{equation*}
+  \term{h} \equiv \abstr{x}{Em}{\term{switch(x, x11, x12)}}
+\end{equation*}
+
+Then we can write this function out in a more traditional way:
+
+\begin{equation*}
+  \term{h(x)} =
+  \begin{cases}
+    \term{x11}, &\text{ when } \term{x = Alice} \\
+    \term{x12}, &\text{ when } \term{x = Bob}
+  \end{cases}
+\end{equation*}
+
+Or, we could write the mapping like this:
+
+\begin{align*}
+  \term{Alice} \longrightarrow \term{x11} \\
+  \term{Bob} \longrightarrow \term{x12}
+\end{align*}
+
+Another switch we could define is this:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}}
+  \hypo{\term{x12} : \term{Ext}}
+  \hypo{\term{x13} : \term{Ext}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x12, x13)} : \term{Ext}}
+\end{prooftree*}
+
+We could form a function from this too, by abstracting over $\term{x}$ with the \abstrI/ rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}^{1}}
+  \hypo{\term{x12} : \term{Ext}}
+  \hypo{\term{x13} : \term{Ext}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x12, x13)} : \term{Ext}}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{Em}{\term{switch(x, x12, x13)}} : \term{Em} \rightarrow \term{Ext}}
+\end{prooftree*}
+
+We could call this function $\term{j}$:
+
+\begin{equation*}
+  \term{j} \equiv \abstr{x}{Em}{\term{switch(x, x12, x13)}}
+\end{equation*}
+
+We could write it out in a more traditional way:
+
+\begin{equation*}
+  \term{j(x)} =
+  \begin{cases}
+    \term{x12}, &\text{ when } \term{x = Alice} \\
+    \term{x13}, &\text{ when } \term{x = Bob}
+  \end{cases}
+\end{equation*}
+
+Or, we could write the mapping like this:
+
+\begin{align*}
+  \term{Alice} \longrightarrow \term{x12} \\
+  \term{Bob} \longrightarrow \term{x13}
+\end{align*}
+
+All of these mappings are mappings from employees $\term{Em}$ to extensions $\term{Ext}$. So all of these examples are inhabitants of the type $\term{Em} \rightarrow \term{Ext}$.
+
+
+\subsection{Boolean function space.}
+
+Above, we defined a function over the booleans, which we named $\term{g}$:
+
+\begin{equation*}
+  \term{g} \equiv \abstr{x}{\Bool/}{\term{switch(\term{x}, \false/, \true/)}}
+\end{equation*}
+
+This is a function from $\Bool/$ to $\Bool/$. Here is the mapping:
+
+\begin{align*}
+  \true/ \longrightarrow \false/ \\
+  \false/ \longrightarrow \true/
+\end{align*}
+
+Using the same techniques that we used to define that function, we could define a different function:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \Bool/^{1}}
+  \hypo{\true/ : \Bool/}
+  \hypo{\false/ : \Bool/}
+  \infer3[$\Bool/$-$\Elim/$]{\term{switch(\term{x}, \true/, \false/)} : \Bool/}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{\Bool/}{\term{switch(\term{x}, \true/, \false/)}} : \Bool/ \rightarrow \Bool/}
+\end{prooftree*}
+
+This is also a function from $\Bool/$ to $\Bool/$. Here is its mapping:
+
+\begin{align*}
+  \true/ \longrightarrow \true/ \\
+  \false/ \longrightarrow \false/
+\end{align*}
+
+Another option would be this:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \Bool/^{1}}
+  \hypo{\true/ : \Bool/}
+  \hypo{\true/ : \Bool/}
+  \infer3[$\Bool/$-$\Elim/$]{\term{switch(\term{x}, \true/, \true/)} : \Bool/}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{\Bool/}{\term{switch(\term{x}, \true/, \true/)}} : \Bool/ \rightarrow \Bool/}
+\end{prooftree*}
+
+This too is a function from $\Bool/$ to $\Bool/$. Here is the mapping:
+
+\begin{align*}
+  \true/ \longrightarrow \true/ \\
+  \false/ \longrightarrow \true/
+\end{align*}
+
+The type $\Bool/ \rightarrow \Bool/$ is the type of all functions from $\Bool/$ to $\Bool/$. All of these examples are inhabitants.
+
+
+\section{Pairs}
+
+In CTT, we can build more complex types from simpler types. Arrow types are one example of this. Another example is a 2-tuple, i.e., a pair. To form a pair type, we take two other types, and we put them together. We write a pair type like this:
+
+\begin{equation*}
+  \term{A \pairSymbol/ B}
+\end{equation*}
+
+That indicates the type of all pairs whose first component is an element of type $\term{A}$ and whose second component is an element of type $\term{B}$.
+
+Of course, this requires that $\term{A}$ and $\term{B}$ are legal types in the system. Here is the formation rule:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{B} : \Type/}
+  \infer2[\pairF/]{\term{A \pairSymbol/ B} : \Type/}
+\end{prooftree*}
+
+To construct an element of this type, we need an inhabitant of $\term{A}$, and an inhabitant of $\term{B}$. Here is the introduction rule:
+
+\begin{prooftree*}
+  \hypo{\term{a} : \term{A}}
+  \hypo{\term{b} : \term{B}}
+  \infer2[\pairI/]{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+\end{prooftree*}
+
+We could follow a similar pattern and define 3-tuples, 4-tuples, and so on. For example, the formation for 3-tuples would be:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{B} : \Type/}
+  \hypo{\term{C} : \Type/}
+  \infer3{\term{A \pairSymbol/ B \pairSymbol/ C} : \Type/}
+\end{prooftree*}
+
+
+\subsection{Examples.} 
+
+We can form pairs of, say, employees and phone extensions, $\term{Em \pairSymbol/ Ext}$. Here is the derivation showing that this is a legal type in the system:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/} 
+  \infer2[\pairF/]{\term{Em \pairSymbol/ Ext}}
+\end{prooftree*}
+
+We can then construct any pair of employees and phone extensions. Here are two such examples:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \infer1[$\term{Alice}$-$\Intro/$]{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/} 
+  \infer1[$\term{x11}$-$\Intro/$]{\term{x11} : \term{Ext}}
+  \infer2[\pairI/]{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+\end{prooftree}
+\hskip 0.5cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \infer1[$\term{Bob}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/} 
+  \infer1[$\term{x12}$-$\Intro/$]{\term{x12} : \term{Ext}}
+  \infer2[\pairI/]{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+\end{prooftree}
+$$
+
+We can even form pairs of employees, i.e., of type $\term{Em \pairSymbol/ Em}$. For example:
+
+$$
+\begin{prooftree}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \infer1[$\term{Alice}$-$\Intro/$]{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/} 
+  \infer1[$\term{Bob}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  \infer2[\pairI/]{\pair{\term{Alice}}{\term{Bob}} : \term{Em \pairSymbol/ Em}}
+\end{prooftree}
+\hskip 0.5cm
+\begin{prooftree}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \infer1[$\term{Bob}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/} 
+  \infer1[$\term{Bob}$-$\Intro/$]{\term{Bob} : \term{Ext}}
+  \infer2[\pairI/]{\pair{\term{Bob}}{\term{Bob}} : \term{Em \pairSymbol/ Em}}
+\end{prooftree}
+$$
+
+
+\section{Pair elimination}
+
+Elimination rules tell us how to iterate over every inhabitant of a type and construct some further value that is based on it. When it comes to pairs, any object can be constructed from that pair, simply by using the individual components of the pair to construct it.
+
+Suppose we have an object $\term{c}$ of type $\term{C}$. Suppose also that, when we constructed $\term{c}$, we used an object $\term{x}$ of type $\term{A}$ and an object $\term{b}$ of type $\term{B}$. Let us represent that like this:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+\end{prooftree*}
+
+Suppose now that we also have a pair, $\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+We can reconstruct $\term{c}$ by using $\term{a}$ in place of $\term{x}$, and $\term{b}$ in place of $\term{y}$. To denote the result of rebuilding $\term{c}$ with the components of the pair $\pair{\term{a}}{\term{b}}$, let us write this:
+
+\begin{equation*}
+  \term{elim(\pair{a}{b}, c)}
+\end{equation*}
+
+When we rebuild $\term{c}$, we still end up with an object of type $\term{C}$. So the type of this expression is $\term{C}$:
+
+\begin{equation*}
+  \term{elim(\pair{a}{b}, c)} : \term{C}
+\end{equation*}
+
+So, we can say that, if we have the pair $\pair{\term{a}}{\term{b}}$, and if we have $\term{c}$, we can rebuild $\term{c}$ using $\term{a}$ and $\term{b}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, c)} : \term{C}}
+\end{prooftree*}
+
+This is the elimination rule for pairs.
+
+The computation rule specifies what the new value is. To get the new value, we take $\term{c}$, and we substitute $\term{a}$ and $\term{b}$ in for $\term{x}$ and $\term{y}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, c)} = \term{c[x := a, y := b]} : \term{C}}
+\end{prooftree*}
+
+
+\subsection{Examples.}
+
+Let us assign $\term{Alice}$ to phone extension $\term{x11}$, by pairing $\term{Alice}$ and $\term{x11}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em} : \Type/}
+  \infer1[$\term{Alice}$-$\Intro/$]{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{x11} : \term{Ext}}
+  \infer2[\pairI/]{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+\end{prooftree*}
+
+Let us drop the labels to save space (it should be obvious which rules are used at each step):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x11} : \term{Ext}}
+  \infer2{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+\end{prooftree*}
+
+Now let us assign Alice and her extension to an office, by pairing the previous pair with, say, room $\term{r01}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x11} : \term{Ext}}
+  \infer2{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+\end{prooftree*}
+
+Here we have constructed a new object --- namely, $\pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}}$ --- which inhabits a type --- $\term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}$.
+
+Notice, though, that we constructed this object using the pair $\pair{\term{Alice}}{\term{x11}}$. We could reconstruct this element, using a different pair of elements from $\term{Em}$ and  $\term{Ext}$. For example, suppose we have the pair $\pair{\term{Bob}}{\term{x12}}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x11} : \term{Ext}}
+  \infer2{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+
+  \infer[no rule]2{}
+\end{prooftree*}
+
+We can apply the elimination rule here, since we are in a situation that matches the elimination rule template. In this case, $\term{a}$ is $\term{Bob}$, $\term{b}$ is $\term{x12}$, $\term{x}$ is $\term{Alice}$, $\term{y}$ is $\term{x11}$, $\term{c}$ is $\pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}}$, and $\term{C}$ is $\term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}$. 
+
+Here we apply the elimination rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x11} : \term{Ext}}
+  \infer2{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+
+  \infer2[\pairE/]{\term{elim(\pair{\term{Bob}}{\term{x12}}, \pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}})} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+\end{prooftree*}
+
+We can use the computation rule to get new object reconstructed with $\term{Bob}$ and $\term{x12}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x11} : \term{Ext}}
+  \infer2{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+
+  \infer2[\pairEq/]{\term{elim(\pair{\term{Bob}}{\term{x12}}, \pair{\pair{\term{Alice}}{\term{x11}}}{\term{r01}})} = \pair{\pair{\term{Bob}}{\term{x12}}}{\term{r01}} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+\end{prooftree*}
+
+We can then use substitution to extract just the new object:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\term{elim(\ldots )} = \pair{\pair{\term{Bob}}{\term{x12}}}{\term{r01}} : \ldots}
+
+ \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\pair{\term{Bob}}{\term{x12}}}{\term{r01}} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+
+  \infer2[\SubstTerm/]{\pair{\pair{\term{Bob}}{\term{x12}}}{\term{r01}} : \term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}}
+\end{prooftree*}
+
+In this example, we built a type (namely, $\term{(Em \pairSymbol/ Ext) \pairSymbol/ Rm}$) that used an element from $\term{Em}$ and $\term{Ext}$ (namely $\term{Alice}$ and $\term{x11}$). Then we used the pair elimination rule to rebuild that object using a different pair of elements from $\term{Em}$ and $\term{Ext}$ (namely $\term{Bob}$ and $\term{x12}$).
+
+However, we do not need to use elements from both $\term{Em}$ and $\term{Ext}$ in the elimination rule. For example, suppose we build a type that only uses $\term{Em}$. Suppose we pair up employees with offices, and we assign $\term{Alice}$ to office $\term{r01}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+\end{prooftree*}
+
+Suppose we also have the pair $\pair{\term{Bob}}{\term{x12}}$ again:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+We can apply the pair elimination rule in this case, if we like, since we are again in a situation that matches the elimination rule template. Here, $\term{a}$ is $\term{Bob}$, $\term{b}$ is $\term{x12}$, $\term{x}$ is $\term{Alice}$, $\term{y}$ is not used, $\term{c}$ is $\pair{\term{Alice}}{\term{r01}}$, and $\term{C}$ is $\term{Em \pairSymbol/ Rm}$. Here is the elimination rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+  
+  \infer2[\pairE/]{\term{elim(\pair{\term{Bob}}{\term{x12}}, \pair{\term{Alice}}{\term{r01}})} : \term{Em \pairSymbol/ Rm}}
+\end{prooftree*}
+
+Notice that $\term{y}$ from the elimination rule template is not used here to build $\term{c}$ (which is $\pair{\term{Alice}}{\term{r01}}$ in this case). We only use $\term{x}$ (which is $\term{Alice}$ in this case) to build $\term{c}$. So $\term{y}$ from the rule template plays no role here.
+
+We can go on and use the computation rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+  
+  \infer2[\pairEq/]{\term{elim(\pair{\term{Bob}}{\term{x12}}, \pair{\term{Alice}}{\term{r01}})} = \pair{\term{Bob}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+\end{prooftree*}
+
+And then we could use the substitution rule to extract just the pair $\pair{\term{Bob}}{\term{r01}}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}  
+  \infer1[\pairEq/]{\term{elim(\ldots)} = \pair{\term{Bob}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+  
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Bob}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+
+  \infer2[\SubstTerm/]{\pair{\term{Bob}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+\end{prooftree*}
+
+In that example, we did not use $\term{y}$ from the elimination rule template. But we do not need to use $\term{x}$ either. For example, suppose that in place of $\term{c}$ of type $\term{C}$ from the elimination rule template, we simply introduce room $\term{r02}$ of type $\term{Rm}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r02} : \term{Rm}}
+\end{prooftree*}
+
+Here we have used no elements from $\term{Em}$ or $\term{Ext}$ to construct $\term{r02}$. Suppose, then, that we have the pair $\pair{\term{Bob}}{\term{x12}}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+  
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r02} : \term{Rm}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+We can apply the pair elimination rule here too. In this case, $\term{a}$ is $\term{Bob}$, $\term{b}$ is $\term{x12}$, $\term{c}$ is $\term{r01}$, and $\term{C}$ is $\term{Rm}$, while $\term{x}$ and $\term{y}$ simply do not appear. So, let us apply the elimination rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+  
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r02} : \term{Rm}}
+  
+  \infer2[\pairE/]{\term{elim(\pair{\term{Bob}}{\term{x12}}, \term{r02})} : \term{Rm}}
+\end{prooftree*}
+
+We can use the computation rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+  
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r02} : \term{Rm}}
+  
+  \infer2[\pairEq/]{\term{elim(\pair{\term{Bob}}{\term{x12}}, \term{r02})} = \term{r02}: \term{Rm}}
+\end{prooftree*}
+
+And we can use elimination to extract the result:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Ext} : \Type/}
+  \infer1{\term{x12} : \term{Ext}}
+  \infer2{\pair{\term{Bob}}{\term{x12}} : \term{Em \pairSymbol/ Ext}}
+  
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r02} : \term{Rm}}
+  
+  \infer2[\pairEq/]{\term{elim(\pair{\term{Bob}}{\term{x12}}, \term{r02})} = \term{r02}: \term{Rm}}
+  
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r02} : \term{Rm}}
+
+  \infer2[\SubstTerm/]{\term{r02} : \term{Rm}}
+\end{prooftree*}
+
+
+\subsection{Projections.}
+
+Consider the pair elimination and computation rules again:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, c)} : \term{C}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, c)} = \term{c[x := a, y := b]} : \term{C}}
+\end{prooftree*}
+
+These rules tell us how to build a further element $\term{C}$, from the pair $\pair{\term{a}}{\term{b}}$. There is no reason that we cannot let $\term{C}$ be the type of one of the pair's components, i.e., $\term{A}$ or $\term{B}$.
+
+For example, let $\term{C}$ be $\term{A}$. If we substitute $\term{A}$ in for $\term{C}$, the rules now look like this:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{A}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, c)} : \term{A}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{A}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, c)} = \term{c[x := a, y := b]} : \term{A}}
+\end{prooftree*}
+
+The object $\term{c}$ is now not some further object from another type. It is just the object of type $\term{A}$ that we started with, namely $\term{x}$. So we can replace every occurrence of $\term{c}$ with $\term{x}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{x} : \term{A}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, x)} : \term{A}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{x} : \term{A}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, x)} = \term{c[x := a, y := b]} : \term{A}}
+\end{prooftree*}
+
+Of course, $\term{y} : \term{B}$ is not used here, so we can erase it (and the substitution of $\term{b} : \term{B}$), to make the rules simpler still:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}}
+  \ellipsis{}{\term{x} : \term{A}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, x)} : \term{A}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}}
+  \ellipsis{}{\term{x} : \term{A}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, x)} = \term{x[x := a]} : \term{A}}
+\end{prooftree*}
+
+It is now redundant to show the vertical dots from $\term{x} : \term{A}$ to $\term{x} : \term{A}$, so we can collapse them:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, x)} : \term{A}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, x)} = \term{x[x := a]} : \term{A}}
+\end{prooftree*}
+
+And it is redundant to take $\term{x} : \term{A}$ and then immediately replace it with $\term{a} : \term{A}$. So we can remove that part of the rules to make them even simpler:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \infer1[\pairE/]{\term{elim(\pair{a}{b}, a)} : \term{A}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \infer1[\pairEq/]{\term{elim(\pair{a}{b}, a)} = \term{a} : \term{A}}
+\end{prooftree*}
+
+Finally, since $\term{elim(\pair{a}{b}, a)}$ always selects the first item from the pair, we can just call it $\fst{\pair{a}{b}}$ (and give the rules new names to indicate this):
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \infer1[\pairEL/]{\fst{\pair{a}{b}} : \term{A}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \infer1[\pairEqL/]{\fst{\pair{a}{b}} = \term{a} : \term{A}}
+\end{prooftree*}
+
+These two derived rules are named with a subscripted numeral one, because they let us extract the first component of a pair.
+
+We can do something similar with the type $\term{B}$. If we take the original elimination and computation rules and set $\term{C}$ to $\term{B}$, we can build rules that let us extract the second component of a pair:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \infer1[\pairER/]{\snd{\pair{a}{b}} : \term{B}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \infer1[\pairEqR/]{\snd{\pair{a}{b}} = \term{b} : \term{B}}
+\end{prooftree*}
+
+
+\subsection{Examples.}
+
+Take the elimination and computation rules again:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, c)} : \term{C}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, c)} = \term{c[x := a, y := b]} : \term{C}}
+\end{prooftree*}
+
+Now replace $\term{A}$ and $\term{B}$ with $\term{Em}$ and $\term{Ext}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, c)} : \term{C}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairEq/]{\term{elim(\pair{a}{b}, c)} = \term{c[x := a, y := b]} : \term{C}}
+\end{prooftree*}
+
+Now replace $\term{a}$ and $\term{b}$ with $\term{Alice}$ and $\term{x11}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairE/]{\term{elim(\pair{Alice}{x11}, c)} : \term{C}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairEq/]{\term{elim(\pair{Alice}{x11}, c)} = \term{c[x := Alice, y := x11]} : \term{C}}
+\end{prooftree*}
+
+Replace $\term{C}$ with $\term{Em}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{c} : \term{Em}}
+  \infer2[\pairE/]{\term{elim(\pair{Alice}{x11}, c)} : \term{Em}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{c} : \term{Em}}
+  \infer2[\pairEq/]{\term{elim(\pair{Alice}{x11}, c)} = \term{c[x := Alice, y := x11]} : \term{Em}}
+\end{prooftree*}
+
+And replace $\term{c}$ with $\term{x}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{x} : \term{Em}}
+  \infer2[\pairE/]{\term{elim(\pair{Alice}{x11}, x)} : \term{Em}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}, \term{y} : \term{Ext}}
+  \ellipsis{}{\term{x} : \term{Em}}
+  \infer2[\pairEq/]{\term{elim(\pair{Alice}{x11}, x)} = \term{x[x := Alice, y := x11]} : \term{Em}}
+\end{prooftree*}
+
+We don't need $\term{y}$, so we can delete references to it:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}}
+  \ellipsis{}{\term{x} : \term{Em}}
+  \infer2[\pairE/]{\term{elim(\pair{Alice}{x11}, x)} : \term{Em}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}}
+  \ellipsis{}{\term{x} : \term{Em}}
+  \infer2[\pairEq/]{\term{elim(\pair{Alice}{x11}, x)} = \term{x[x := Alice]} : \term{Em}}
+\end{prooftree*}
+
+And we don't need the vertical ellipses, so we can drop that too:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}}
+  \infer2[\pairE/]{\term{elim(\pair{Alice}{x11}, x)} : \term{Em}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \hypo{\term{x} : \term{Em}}
+  \infer2[\pairEq/]{\term{elim(\pair{Alice}{x11}, x)} = \term{x[x := Alice]} : \term{Em}}
+\end{prooftree*}
+
+Finally, we don't need to introduce $\term{x}$ and then replace it with $\term{Alice}$, so we can just go directly from $\term{x}$ to $\term{Alice}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \infer1[\pairE/]{\term{elim(\pair{Alice}{x11}, \term{Alice})} : \term{Em}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \infer1[\pairEq/]{\term{elim(\pair{Alice}{x11}, \term{Alice})} = \term{Alice} : \term{Em}}
+\end{prooftree*}
+
+We can replace the $\term{elim()}$ expression with $\term{fst()}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \infer1[\pairEL/]{\term{fst(\pair{Alice}{x11})} : \term{Em}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \infer1[\pairEqL/]{\term{fst(\pair{Alice}{x11})} = \term{Alice} : \term{Em}}
+\end{prooftree*}
+
+We could do the same to build rules that let us extract the second $\term{snd()}$ component of the pair:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \infer1[\pairER/]{\term{snd(\pair{Alice}{x11})} : \term{Ext}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{Alice}}{\term{x11}} : \term{Em \pairSymbol/ Ext}}
+  \infer1[\pairEqR/]{\term{snd(\pair{Alice}{x11})} = \term{x11} : \term{Ext}}
+\end{prooftree*}
+
+We can use these simplified $\term{fst()}$ and $\term{snd()}$ rules to extract the first and second components of any pairs. For example, suppose we pair up a phone extension with a room:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+  \hypo{}
+  \infer1[$\term{Rm}$-$\Form/$]{\term{Rm} : \Type/}
+  \infer1[$\term{r02}$-$\Intro/$]{\term{r02} : \term{Rm}}
+  \infer2[\pairI/]{\pair{\term{x13}}{\term{r02}} : \term{Ext \pairSymbol/ Rm}}
+\end{prooftree*}
+
+We can extract the first component of this pair with the \pairEL/ rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+  \hypo{}
+  \infer1[$\term{Rm}$-$\Form/$]{\term{Rm} : \Type/}
+  \infer1[$\term{r02}$-$\Intro/$]{\term{r02} : \term{Rm}}
+  \infer2[\pairI/]{\pair{\term{x13}}{\term{r02}} : \term{Ext \pairSymbol/ Rm}}
+  \infer1[\pairEL/]{\fst{\pair{\term{x13}}{\term{r02}}} : \term{Ext}}
+\end{prooftree*}
+
+If we need to compute the value, we can use the computation rule \pairEqL/:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+  \hypo{}
+  \infer1[$\term{Rm}$-$\Form/$]{\term{Rm} : \Type/}
+  \infer1[$\term{r02}$-$\Intro/$]{\term{r02} : \term{Rm}}
+  \infer2[\pairI/]{\pair{\term{x13}}{\term{r02}} : \term{Ext \pairSymbol/ Rm}}
+  \infer1[\pairEqL/]{\fst{\pair{\term{x13}}{\term{r02}}} = \term{x13} : \term{Ext}}
+\end{prooftree*}
+
+And we can use substitution to extract just the value:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+  \hypo{}
+  \infer1[$\term{Rm}$-$\Form/$]{\term{Rm} : \Type/}
+  \infer1[$\term{r02}$-$\Intro/$]{\term{r02} : \term{Rm}}
+  \infer2[\pairI/]{\pair{\term{x13}}{\term{r02}} : \term{Ext \pairSymbol/ Rm}}
+  \infer1[\pairEqL/]{\fst{\pair{\term{x13}}{\term{r02}}} = \term{x13} : \term{Ext}}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+  \infer2[\SubstTerm/]{\term{x13} : \term{Ext}}
+\end{prooftree*}
+
+Alternatively, we could also use the \pairEqR/ rule to extract the second component of the pair:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext} : \Type/}
+  \infer1[$\term{x13}$-$\Intro/$]{\term{x13} : \term{Ext}}
+  \hypo{}
+  \infer1[$\term{Rm}$-$\Form/$]{\term{Rm} : \Type/}
+  \infer1[$\term{r02}$-$\Intro/$]{\term{r02} : \term{Rm}}
+  \infer2[\pairI/]{\pair{\term{x13}}{\term{r02}} : \term{Ext \pairSymbol/ Rm}}
+  \infer1[\pairEqR/]{\snd{\pair{\term{x13}}{\term{r02}}} = \term{r02} : \term{Rm}}
+  \hypo{}
+  \infer1[$\term{Rm}$-$\Form/$]{\term{Rm} : \Type/}
+  \infer1[$\term{r02}$-$\Intro/$]{\term{r02} : \term{Rm}}
+  \infer2[\SubstTerm/]{\term{r02} : \term{Rm}}
+\end{prooftree*}
+
+
+\section{Families of types}
+
+In CTT, when we write out the name of a type (say, in the formation rule), we are allowed to insert the names of inhabitants from other types.
+
+Suppose we want to define a type for projects that each employees are working on. For example, we could define a type for the projects that Alice is working on, which we can call $\term{Prj(Alice)}$:
+
+\begin{prooftree*}
+  \hypo{\term{Em} : \Type/}
+  \hypo{\term{Alice} : \term{Em}}
+  \infer2[$\term{Prj(Alice)}$-$\Form/$]{\term{Prj(Alice)} : \Type/}
+\end{prooftree*}
+
+This says that, so long as $\term{Em}$ is a valid type and $\term{Alice}$ is a valid inhabitant of $\term{Em}$, then $\term{Prj(Alice)}$ is a valid type.
+
+We can define a similar type for Bob:
+
+\begin{prooftree*}
+  \hypo{\term{Em} : \Type/}
+  \hypo{\term{Bob} : \term{Em}}
+  \infer2[$\term{Prj(Bob)}$-$\Form/$]{\term{Prj(Bob)} : \Type/}
+\end{prooftree*}
+
+Together, these make up a family of types, since they are exactly the same, except for the name of the employee used in their name.
+
+To define the whole family in a concise way, we can simply use a generic placeholder, like $\term{x}$, to stand in place of the employee name:
+
+\begin{prooftree*}
+  \hypo{\term{Em} : \Type/}
+  \hypo{\term{x} : \term{Em}}
+  \infer2[$\term{Prj(x)}$-$\Form/$]{\term{Prj(x)} : \Type/}
+\end{prooftree*}
+
+This says that, if $\term{Em}$ is a valid type and $\term{x}$ is a valid inhabitant of $\term{Em}$ (whichever inhabitant $\term{x}$ might be), then $\term{Prj(x)}$ is a valid type. This rule defines the entire type family, because it defines the type $\term{Prj(x)}$ for any $\term{x}$ of $\term{Em}$, rather than some particular inhabitant of $\term{Em}$.
+
+Once we have defined the family of types, we can specify the inhabitants of each type in the family, just as we would for any other finite type. 
+
+For example, let us suppose that Alice is working on two projects: accounting (which we will call $\term{acc}$) and logistics (which we will call $\term{log}$).
+
+$$
+\begin{prooftree}
+  \hypo{\term{Prj(Alice)} : \Type/}
+  \infer1[$\term{acc}$-$\Intro/$]{\term{acc} : \term{Prj(Alice)}}
+\end{prooftree}
+\hskip 1cm
+\begin{prooftree}
+  \hypo{\term{Prj(Alice)} : \Type/}
+  \infer1[$\term{log}$-$\Intro/$]{\term{log} : \term{Prj(Alice)}}
+\end{prooftree}
+$$
+
+The rule on the left says that, if $\term{Prj(Alice)}$ is a valid type, then $\term{acc}$ inhabits that type. The rule on the right is similar, but for $\term{log}$. 
+
+Likewise, we can define inhabitants for the type $\term{Prj(Bob)}$. Let's suppose that Bob is working on one project. marking (which we will call $\term{mrk}$):
+
+\begin{prooftree*}
+  \hypo{\term{Prj(Bob)} : \Type/}
+  \infer1[$\term{mrk}$-$\Intro/$]{\term{mrk} : \term{Prj(Bob)}}
+\end{prooftree*}
+
+So each type in the family is a type just like any other, which has formation rules and introduction rules. We can also define elimination rules and computation rules for these types too, just as we can for any other type.
+
+Type families are often called dependent types, because the types in the family depend on the inhabitants of another type. They are also sometimes called indexed types, because each type in the family is indexed by an inhabitant from another type.
+
+
+\section{Type families and elimination rules}
+
+Elimination rules work with type families too. If we can pair up each object in a type $\term{A}$ with an object from the corresponding type of a type family, then we can switch over the cases.
+
+Suppose we have a type $\term{A}$, which has three inhabitants $\term{a_{1}}$, $\term{a_{2}}$, and $\term{a_{3}}$. Suppose that we also have a type family $\term{B(x)}$, where $\term{x}$ is an inhabitant of $\term{A}$. Thus, in the family $\term{B(x)}$, we have three types: $\term{B(a_{1})}$, $\term{B(a_{2})}$, and $\term{B(a_{3})}$. Suppose finally that each of these types has one inhabitant: $\term{b_{1}}$ inhabits $\term{B(a_{1})}$, $\term{b_{2}}$ inhabits $\term{B(a_{2})}$, and $\term{b_{3}}$ inhabits $\term{B(a_{3})}$.
+
+We can construct a switch over $\term{A}$, because for each object in $\term{A}$, we can pair it up with an object from the corresponding type in the family $\term{B(x)}$. Here is the switch:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : A)}: \\
+  \term{case~1}~&\term{(if~x~is~a_{1}) : return~b_{1} : B(a_{1})} \\
+  \term{case~2}~&\term{(if~x~is~a_{2}) : return~a_{2} : B(a_{2})} \\
+  \term{case~3}~&\term{(if~x~is~a_{3}) : return~a_{1} : B(a_{3})}
+\end{align*}
+
+This switch is exactly like the other switches we discussed before, but there is something new: each return type matches the value of the case. 
+
+Consider the first case. The value of $\term{x : A}$ in the first case is $\term{a_{1}}$. The return type of this case is the corresponding type from the family $\term{B(x)}$. 
+
+What is the corresponding type of that family? It is $\term{B(a_{1})}$, because in the first case $\term{x}$ is $\term{a_{1}}$. The return type for case $\term{a_{1}}$ is not just any type in the $\term{B(x)}$ family. It is the type we get when we substitute the case $\term{a_{1}}$ in for $\term{x}$, which is $\term{B(a_{1})}$. 
+
+The same holds for the second case. The value of $\term{x : A}$ in the second case is $\term{a_{2}}$, and so the return type is $\term{B(a_{2})}$, which is the type in the family $\term{B(x)}$ that we get when we substitute $\term{a_{2}}$ for $\term{x}$. Similarly, the return type for the third case, when $\term{x}$ is $\term{a_{3}}$, is $\term{B(a_{3})}$.
+
+So, in order to pair up objects from a type $\term{A}$ with objects from a family of types $\term{B(x)}$, each case of $\term{A}$ must be paired up with an object from the type in $\term{B(x)}$ that matches its case. 
+
+We can update the elimination rule template we presented earlier, to account for this new requirement. The updated rule template looks like the following, where $\term{a_{1}}$, $\term{a_{2}}$, and so on refer to subsequent inhabitants of $\term{A}$:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{option~1} : \term{B(a_{1})}}
+  \hypo{\term{option~2} : \term{B(a_{2})}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Elim/$]{\term{switch(x, option~1, option~2, \ldots) : B[x := a_{1}/a_{2}/\ldots]}}
+\end{prooftree*}
+
+This rule template is just the same as it was before, except that it specifies the output types for each case.
+
+The computation rules also need to be updated in a similar way. Here is the first rule, updated:
+
+\begin{prooftree*}
+  \hypo{\term{a_{1}} : \term{A}}
+  \hypo{\term{option~1} : \term{B(a_{1})}}
+  \hypo{\term{option~2} : \term{B(a_{2})}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{1}$]{\term{switch(a_{1}, option~1, option~2, \ldots) = option~1 : B(a_{1})}}
+\end{prooftree*}
+
+Here is the second computation rule, updated:
+
+\begin{prooftree*}
+  \hypo{\term{a_{2}} : \term{A}}
+  \hypo{\term{option~1} : \term{B(a_{1})}}
+  \hypo{\term{option~2} : \term{B(a_{2})}}
+  \hypo{\ldots}
+  \infer4[$\term{A}$-$\Eq/_{2}$]{\term{switch(a_{2}, option~1, option~2, \ldots) = option~2 : B(a_{2})}}
+\end{prooftree*}
+
+\subsection{Examples.}
+
+Suppose we want to pair up each employee $\term{Em}$ with a project $\term{Prj(x)}$. Here is one possible way to do that:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : Emp)}: \\
+  \term{case~1}~&\term{(if~x~is~Alice) : return~acc : Prj(Alice)} \\
+  \term{case~2}~&\term{(if~x~is~Bob) : return~mrk : Prj(Bob)}
+\end{align*}
+
+If the employee in question is Alice, then we can return the accounting project. If it is Bob, then we return the marketing project.
+
+Here is that switch, as an elimination rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}}
+  \hypo{\term{acc} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, acc, mrk) : Prj[x := Alice/Bob]}}
+\end{prooftree*}
+
+And here are the computation rules:
+
+\begin{prooftree*}
+  \hypo{\term{Alice} : \term{Em}}
+  \hypo{\term{acc} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Eq/_{1}$]{\term{switch(Alice, acc, mrk) = acc : Prj(Alice)}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\term{Bob} : \term{Em}}
+  \hypo{\term{acc} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Eq/_{2}$]{\term{switch(Bob, acc, mrk) = mrk : Prj(Bob)}}
+\end{prooftree*}
+
+Since Alice is assigned to two projects (i.e., since there are two inhabitants in the type $\term{Prj(Alice)}$), there is another possible switch. We could pair up Alice with the other project she's assigned to, namely logistics:
+
+\begin{align*}
+  \term{switch~on}~&\term{(x : Emp)}: \\
+  \term{case~1}~&\term{(if~x~is~Alice) : return~log : Prj(Alice)} \\
+  \term{case~2}~&\term{(if~x~is~Bob) : return~mrk : Prj(Bob)}
+\end{align*}
+
+Here is that switch, as an elimination rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}}
+  \hypo{\term{log} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, log, mrk) : Prj[x := Alice/Bob]}}
+\end{prooftree*}
+
+And here are the computation rules:
+
+\begin{prooftree*}
+  \hypo{\term{Alice} : \term{Em}}
+  \hypo{\term{log} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Eq/_{1}$]{\term{switch(Alice, log, mrk) = log : Prj(Alice)}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\term{Bob} : \term{Em}}
+  \hypo{\term{log} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Eq/_{2}$]{\term{switch(Bob, log, mrk) = mrk : Prj(Bob)}}
+\end{prooftree*}
+
+
+\section{Families with empty members}
+
+Sometimes, we cannot pair up every member of one type $\term{A}$ with an object from a corresponding type in a family of types $\term{B(x)}$. This happens when at least one of the types in the family is empty (i.e., when it has no inhabitants). 
+
+Suppose we make copies of the $\term{Em}$ and $\term{Prj(x)}$ types, called $\term{Em^{*}}$ and $\term{Prj(x)^{*}}$. Suppose we then add another employee to $\term{Em^{*}}$, named Cary:
+
+\begin{prooftree*}
+  \hypo{\term{Em^{*}} : \Type/}
+  \infer1[$\term{Cary}$-$\Intro/$]{\term{Cary} : \term{Em^{*}}}
+\end{prooftree*}
+
+Since the type $\term{Prj(x)^{*}}$ is a family of types defined over $\term{Em^{*}}$, there is now a new type in this family, namely Cary's projects $\term{Prj(Cary)^{*}}$:
+
+\begin{prooftree*}
+  \hypo{\term{Em^{*}} : \Type/}
+  \hypo{\term{Cary} : \term{Em^{*}}}
+  \infer2[$\term{Prj(Cary)^{*}}$-$\Form/$]{\term{Prj(Cary)^{*}}}
+\end{prooftree*}
+
+Suppose now that Cary has not been assigned any projects yet, and so the type $\term{Prj(Cary)^{*}}$ has no inhabitants.
+
+Now we have a family of types $\term{Prj(x)^{*}}$ which has three members: $\term{Prj(Alice)^{*}}$, $\term{Prj(Bob)^{*}}$, and $\term{Prj(Cary)^{*}}$. The first two of these are inhabited, but the third is empty.
+
+Can we pair up each employee with a project? That is, can we pair up each item from $\term{Em^{*}}$ with an item from the corresponding type in the family $\term{Prj(x)^{*}}$? The answer is no, because there are no projects for the third employee. 
+
+This means that we cannot switch over $\term{Em^{*}}$ with respect to $\term{Prj(x)^{*}}$. Hence, we cannot form an elimination rule (or its associated computation rules) for $\term{Em^{*}}$ via $\term{Prj(x)^{*}}$.
+
+
+\section{Dependent functions}
+
+Abstraction works with families of types too. For example, suppose we have this switch from earlier:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}}
+  \hypo{\term{log} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, log, mrk) : Prj[x := Alice/Bob]}}
+\end{prooftree*}
+
+We can use the \abstrI/ rule and mark $\term{x} : \term{Em}$ as replaceable:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}^{1}}
+  \hypo{\term{log} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, log, mrk) : Prj[x := Alice/Bob]}}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{Em}{\term{switch(x, log, mrk)}} : \term{Em} \rightarrow \term{Prj(x)}}
+\end{prooftree*}
+
+Now we have a function from employees to their projects. We can apply it to $\term{Alice}$, for example:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{Em}{\term{switch(x, log, mrk)}} : \term{Em} \rightarrow \term{Prj(x)}}
+  \hypo{}
+  \ellipsis{}{\term{Alice} : \term{Em}}
+  \infer2[\abstrE/]{\app{\abstr{x}{Em}{\term{switch(x, log, mrk)}}}{Alice} : \term{Prj(Alice)}}
+\end{prooftree*}
+
+Notice that when we apply the function to $\term{Alice}$, we also apply $\term{Alice}$ to the type family $\term{Prj(x)}$, to get $\term{Prj(Alice)}$.
+
+We are using the same mechanism for abstraction and application as before, except this time around, we are extending the substitution to the type families too.
+
+In CTT, when abstraction involves type families, we use a different notation for the types. In a simple abstraction, the type is a simple function from $\term{A \rightarrow B}$. But this does not give us enough information. When dependent types are involved, the abstraction is a function from each \emph{object} $\term{x}$s of type $\term{A}$ to the \emph{family} of types $\term{B(x)}$ that depend on the value of $\term{x}$. 
+
+To make that clear, I suppose we could encode the type like this:
+
+\begin{equation*}
+  \term{x : A \rightarrow B(x)}
+\end{equation*}
+
+But instead, we use a different notation. We write it like this:
+
+\begin{equation*}
+  \depfunc{x}{A}{B(x)}
+\end{equation*}
+
+We call this the type of dependent functions. Its rules are the same as they are for $\abstrBinder/$, but with type families taken into account. Here is the $\PiBinder/$ formation rule:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B(x)} : \Type/}
+  \infer3[\PiF/]{\depfunc{x}{A}{B(x)} : \Type/}
+\end{prooftree*}
+
+Here is the $\PiBinder/$ introduction rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}^{1}}
+  \ellipsis{}{\term{b} : \term{B(x)}}
+  \infer1[\PiI/$^{1}$]{\abstr{x}{A}{b} : \depfunc{x}{A}{B(x)}}
+\end{prooftree*}
+
+Here is the $\PiBinder/$ elimination rule:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b(x)} : \depfunc{x}{A}{B(x)}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\PiE/]{\app{\abstr{x}{A}{b}}{a} : \term{B(a)}}
+\end{prooftree*}
+
+And here is the $\PiBinder/$ computation rule:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b(x)} : \depfunc{x}{A}{B(x)}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\PiEq/]{\app{\abstr{x}{A}{b}}{a}  = \term{b[x := a]} : \term{B(a)}}
+\end{prooftree*}
+
+Now we can rewrite the above example, using the $\PiBinder/$ rules, instead of the $\abstrBinder/$ rules. So, for example, take the switch we started this section with:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}}
+  \hypo{\term{log} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, log, mrk) : Prj[x := Alice/Bob]}}
+\end{prooftree*}
+
+Instead of using the \abstrI/ rule, we can use the \PiI/ rule to mark $\term{x} : \term{Em}$ as replaceable:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{Em}^{1}}
+  \hypo{\term{log} : \term{Prj(Alice)}}
+  \hypo{\term{mrk} : \term{Prj(Bob)}}
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, log, mrk) : Prj[x := Alice/Bob]}}
+  \infer1[\PiI/$^{1}$]{\abstr{x}{Em}{\term{switch(x, log, mrk)}} : \depfunc{x}{Em}{\term{Prj(x)}}}
+\end{prooftree*}
+
+Now we have a dependent function from employees to their projects. And we can apply it to $\term{Alice}$, just as before, but using the $\PiBinder/$ rules:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1[\PiI/$^{1}$]{\abstr{x}{Em}{\term{switch(x, log, mrk)}} : \depfunc{x}{Em}{\term{Prj(x)}}}
+  \hypo{}
+  \ellipsis{}{\term{Alice} : \term{Em}}
+  \infer2[\PiE/]{\app{\abstr{x}{Em}{\term{switch(x, log, mrk)}}}{Alice} : \term{Prj(Alice)}}
+\end{prooftree*}
+
+
+\subsection{Universal quantification.}
+
+If we like, we can replace the $\PiBinder/$ symbol with the universal quantifier symbol, $\forall/$. From the perspective of CTT, these are the same thing. If we do that, we have these extra rules (which are really just synonyms for the $\PiBinder/$ variants):
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B(x)} : \Type/}
+  \infer3[\everyF/]{\every{x}{A}{B(x)} : \Type/}
+\end{prooftree*}
+
+Here is the $\everyBinder/$ introduction rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}^{1}}
+  \ellipsis{}{\term{b} : \term{B(x)}}
+  \infer1[\everyI/$^{1}$]{\abstr{x}{A}{b} : \every{x}{A}{B(x)}}
+\end{prooftree*}
+
+Here is the $\everyBinder/$ elimination rule:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b(x)} : \depfunc{x}{A}{B(x)}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\everyE/]{\app{\abstr{x}{A}{b}}{a} : \term{B(a)}}
+\end{prooftree*}
+
+And here is the $\everyBinder/$ computation rule:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b(x)} : \every{x}{A}{B(x)}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\everyEq/]{\app{\abstr{x}{A}{b}}{a}  = \term{b[x := a]} : \term{B(a)}}
+\end{prooftree*}
+
+
+\subsection{Examples.}
+
+Recall from earlier that we assigned Alice to two projects (accounting and logistics), and we assigned Bob to one project (marketing).
+
+Let us prove that for any employee, there is a project. First, let us construct a switch that pairs up $\term{Alice}$ with one of her projects (let us pick $\term{acc}$) and $\term{Bob}$ with his project ($\term{mrk}$):
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{x} : \term{Em}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \infer2{\term{Prj(Alice)} : \Type/}
+  \infer1{\term{acc} : \term{Prj(Alice)}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \infer2{\term{Prj(Bob)} : \Type/}
+  \infer1{\term{mrk} : \term{Prj(Bob)}}
+
+  \infer3{\term{switch(x, acc, mrk) : Prj(x)[x := Alice/Bob]}}
+\end{prooftree*}
+
+Now let us mark $\term{x}$ as replaceable:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{x} : \term{Em}^{1}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \infer2{\term{Prj(Alice)} : \Type/}
+  \infer1{\term{acc} : \term{Prj(Alice)}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \infer2{\term{Prj(Bob)} : \Type/}
+  \infer1{\term{mrk} : \term{Prj(Bob)}}
+
+  \infer3{\term{switch(x, acc, mrk) : Prj(x)[x := Alice/Bob]}}
+  \infer1{\abstr{x}{Em}{\term{switch(x, acc, mrk)} : \depfunc{x}{Em}{Prj(x)}}}
+\end{prooftree*}
+
+With this last step, we constructed a function that maps each employee $\term{x}$ to a project in $\term{Prj(x)}$, i.e., to the projects specifically for them. To make the mapping more explicit:
+
+\begin{align*}
+  \term{Alice} &\longrightarrow \term{acc} \\
+  \term{Bob} &\longrightarrow \term{mrk}
+\end{align*}
+
+If we add the types:
+
+\begin{align*}
+  \term{Alice} : \term{Em} &\longrightarrow \term{acc} : \term{Prj(Alice)} \\
+  \term{Bob} : \term{Em} &\longrightarrow \term{mrk} : \term{Prj(Bob)}
+\end{align*}
+
+So the function $\abstr{x}{Em}{\term{switch(x, acc, mrk)}}$ is an inhabitant of the type $\depfunc{x}{Em}{Prj(x)}$. The above derivation is a proof that $\depfunc{x}{Em}{Prj(x)}$ is ``true.'' I.e., the above derivation derivation constructs an inhabitant of the type, and so it shows that for every employee, there is a project. 
+
+Notice that this function does not map each employee $\term{x}$ to just any inhabitant of the family of types $\term{Prj(x)}$. On the contrary, it only maps each employee $\term{x}$ to that employee's corresponding type in the family. So, $\term{Alice}$ is mapped to a project in $\term{Prj(Alice)}$, not a project in $\term{Prj(Bob)}$, while $\term{Prj(Bob)}$ is mapped to a project in $\term{Prj(Bob)}$, not a project in $\term{Prj(Alice)}$.
+
+Since Alice is assigned to two projects (i.e., since there are two inhabitants in the type $\term{Prj(Alice)}$), there is another function we could build. This time around, we will pair up $\term{Alice}$ with her other project $\term{log}$. Let us construct that switch:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{x} : \term{Em}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \infer2{\term{Prj(Alice)} : \Type/}
+  \infer1{\term{log} : \term{Prj(Alice)}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \infer2{\term{Prj(Bob)} : \Type/}
+  \infer1{\term{mrk} : \term{Prj(Bob)}}
+
+  \infer3{\term{switch(x, log, mrk) : Prj(x)[x := Alice/Bob]}}
+\end{prooftree*}
+
+Now let us mark $\term{x}$ as replaceable:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{x} : \term{Em}^{1}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \infer2{\term{Prj(Alice)} : \Type/}
+  \infer1{\term{log} : \term{Prj(Alice)}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \infer2{\term{Prj(Bob)} : \Type/}
+  \infer1{\term{mrk} : \term{Prj(Bob)}}
+
+  \infer3{\term{switch(x, log, mrk) : Prj(x)[x := Alice/Bob]}}
+  \infer1{\abstr{x}{Em}{\term{switch(x, log, mrk)} : \depfunc{x}{Em}{Prj(x)}}}
+\end{prooftree*}
+
+This function looks very similar to the last function. The difference is that the switch will return $\term{log}$ for $\term{Alice}$ rather than $\term{acc}$. To make the mapping explicit:
+
+\begin{align*}
+  \term{Alice} &\longrightarrow \term{log} \\
+  \term{Bob} &\longrightarrow \term{mrk}
+\end{align*}
+
+If we add the types:
+
+\begin{align*}
+  \term{Alice} : \term{Em} &\longrightarrow \term{log} : \term{Prj(Alice)} \\
+  \term{Bob} : \term{Em} &\longrightarrow \term{mrk} : \term{Prj(Bob)}
+\end{align*}
+
+So we have here constructed another function, that maps an employee $\term{x}$ to the type that corresponds to it in the family $\term{Prj(x)}$. This is a second proof that each employee has a project.
+
+If you think about it, this makes good sense. Since there are two projects assigned to Alice and one assigned to Bob, there should be two functions that pair up each employee with a project (let us call these functions $\term{f}$ and $\term{g}$):
+
+\begin{align*}
+  \term{f(Alice) = acc} \\
+  \term{f(Bob) = mrk} \\
+  \\
+  \term{g(Alice) = log} \\
+  \term{g(Bob) = mrk}
+\end{align*}
+
+And indeed, the two functions we constructed are precisely $\term{f}$ and $\term{g}$.
+
+
+\subsection{Missing members.}
+
+If we cannot assign a project to each employee, then we cannot switch over them. For example, recall the types $\term{Em^{*}}$ and $\term{Prj(x)^{*}}$ above. In $\term{Em^{*}}$, there is an employee $\term{Cary}$ who has no project assigned to her in $\term{Prj(Cary)^{*}}$. So, we cannot construct a switch that pairs up each employee from $\term{Em^{*}}$ with a project from $\term{Prj(x)^{*}}$.
+
+But if we cannot construct such a switch, then we also cannot us the \PiI/ rule to form a function that maps employees from $\term{Em^{*}}$ to projects in $\term{Prj(x)^{*}}$. So we cannot construct an inhabitant of the type $\depfunc{x}{Em^{*}}{Pr(x)^{*}}$. 
+
+In other words, it is not ``true'' that every employee from $\term{Em^{*}}$ has a project in $\term{Prj(x)^{*}}$. And that is exactly what we expect, because we know by looking at the introduction rules for $\term{Em^{*}}$ and $\term{Prj(x)^{*}}$ that $\term{Cary}$ has no project. So we should not be able to construct a function/proof that every employee from $\term{Em^{*}}$ has a project in $\term{Prj(x)^{*}}$.
+
+
+\subsection{Dependent function space.}
+
+Notice that the functions we defined above are dependent functions, because their output depends on their input. Take the first of the above two functions, which maps $\term{Alice}$ to $\term{acc}$ and $\term{Bob}$ to $\term{mrk}$. The domain of that function is the set of employees, but there is not one codomain or range for the function. Rather, there is a family of codomains or ranges, one for each employee. Which codomain or range the function will output depends on which employee we give it for input. If we give it $\term{Alice}$ for input, then its output will range over the inhabitants of $\term{Prj(Alice)}$. If we give it $\term{Bob}$ for input, then its output will range over the inhabitants of $\term{Prj(Bob)}$.
+
+The type $\depfunc{x}{A}{B(x)}$ thus represents the type of all dependent functions from $\term{x} : \term{A}$ to $\term{B(x)}$. Its inhabitants will be functions that map each element $\term{x}$ in $\term{A}$ to an element in the type that corresponds to that element in the family $\term{B(x)}$.
+
+So, for example, suppose that $\term{A}$ has the elements $\term{a}$, $\term{b}$, and $\term{c}$:
+
+\begin{equation*}
+  \term{a}, \term{b}, \term{c} \in \term{A}
+\end{equation*}
+
+Then suppose that $\term{B_{a}}$ has the elements $\term{1}$ and $\term{2}$, $\term{B_{b}}$ has the element $\term{34}$, and suppose that $\term{C_{c}}$ has the elements $\term{20}$, $\term{21}$, and $\term{23}$:
+
+\begin{align*}
+  \term{1}, \term{2} &\in \term{B_{a}} \\
+  \term{34} &\in \term{B_{b}} \\
+  \term{20}, \term{21}, \term{22} &\in \term{B_{c}}
+\end{align*} 
+
+Now, we can define a number functions that map each element from $\term{A}$ to one element in the the corresponding $\term{B_{a}}$, $\term{B_{b}}$, or $\term{B_{c}}$. Here are the options:
+
+\begin{align*}
+  &\term{f(a)} = \term{1} \hskip 0.5cm &\term{g(a)} &= \term{2} \hskip 0.5cm &\term{h(a)} &= \term{1} \\
+  &\term{f(b)} = \term{34} \hskip 0.5cm &\term{g(b)} &= \term{34} \hskip 0.5cm &\term{h(b)} &= \term{34} \\
+  &\term{f(c)} = \term{20} \hskip 0.5cm &\term{g(c)} &= \term{20} \hskip 0.5cm &\term{h(c)} &= \term{21} \\
+  \\
+  &\term{i(a)} = \term{2} \hskip 0.5cm &\term{j(a)} &= \term{1} \hskip 0.5cm &\term{k(a)} &= \term{2} \\
+  &\term{i(b)} = \term{34} \hskip 0.5cm &\term{j(b)} &= \term{34} \hskip 0.5cm &\term{k(b)} &= \term{34} \\
+  &\term{i(c)} = \term{21} \hskip 0.5cm &\term{j(c)} &= \term{22} \hskip 0.5cm &\term{k(c)} &= \term{22}
+\end{align*}
+
+This is the dependent function space from $\term{A}$ to the family $\term{B_{A}}$. The $\PiBinder/$ type is precisely a dependent function space, and its possible inhabitants are precisely all dependent functions like these.
+
+
+\subsection{Deriving $\abstrBinder/$ rules}
+
+The dependent function type is a very general type. In fact, the regular $\abstrBinder/$ type discussed earlier is just a special case of it. It is the case where $\term{B}$ is not a type family. We can derive the $\abstrBinder/$ rules from the $\PiBinder/$ rules, simply by setting $\term{B(x)}$ in the rules to be $\term{B}$ (without any $\term{x}$ in it).
+
+Consider the $\PiBinder/$ formation rule:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B(x)} : \Type/}
+  \infer3[\PiF/]{\depfunc{x}{A}{B(x)} : \Type/}
+\end{prooftree*}
+
+Change $\term{B(x)}$ to just $\term{B}$:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B} : \Type/}
+  \infer3[\PiF/]{\depfunc{x}{A}{B} : \Type/}
+\end{prooftree*}
+
+The type $\depfunc{x}{A}{B}$ represents all mappings from each $\term{x}$ in $\term{A}$ to an element in the corresponding type of the family $\term{B}$. But $\term{B}$ has only one member in the family, namely $\term{B}$. So the type $\depfunc{x}{A}{B}$ represents all mappings from each element in $\term{A}$ to an element in $\term{B}$.
+
+Hence, instead of writing the type as $\depfunc{x}{A}{B}$, we are justified in writing it with a notation that is commonly used to represent mere function types, namely $\term{A \rightarrow B}$:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B} : \Type/}
+  \infer3[\PiF/]{\term{A \rightarrow B} : \Type/}
+\end{prooftree*}
+
+Also, since $\term{x} : \Type/$ is not used in $\term{B}$, we don't need it as a hypothesis in the rule. So we can remove it, which leaves us with the same formation rule that we saw for $\abstrBinder/$:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{B} : \Type/}
+  \infer2[\PiF/ $\equiv$ \abstrF/]{\term{A \rightarrow B} : \Type/}
+\end{prooftree*}
+
+Now consider the is the $\PiBinder/$ introduction rule:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}^{1}}
+  \ellipsis{}{\term{b} : \term{B(x)}}
+  \infer1[\PiI/$^{1}$]{\abstr{x}{A}{b} : \depfunc{x}{A}{B(x)}}
+\end{prooftree*}
+
+Replace $\term{B(x)}$ with $\term{B}$:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}^{1}}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer1[\PiI/$^{1}$]{\abstr{x}{A}{b} : \depfunc{x}{A}{B}}
+\end{prooftree*}
+
+And replace the type $\depfunc{x}{A}{B}$ with $\term{A \rightarrow B}$, which leaves us with the same rule we saw for \abstrI/:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}^{1}}
+  \ellipsis{}{\term{b} : \term{B}}
+  \infer1[\PiI/$^{1} \equiv$ \abstrI/$^{1}$]{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+\end{prooftree*}
+
+The elimination and computation rules follow suit. We can replace $\term{B(x)}$ with $\term{B}$ and $\depfunc{x}{A}{B}$ with $\term{A \rightarrow B}$:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\PiE/]{\app{\abstr{x}{A}{b}}{a} : \term{B}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b(x)} : \term{A \rightarrow B}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\PiEq/]{\app{\abstr{x}{A}{b}}{a}  = \term{b[x := a]} : \term{B}}
+\end{prooftree*}
+
+However, since there are no type families involved, in this case we are applying a mere function (i.e., $\term{A \rightarrow B}$), rather than a dependent function (i.e., $\depfunc{x}{A}{B(x)}$). Hence, we are justified in calling these rules \abstrE/ and \abstrEq/. And indeed, now that we have removed the type family from the rules, these rules turn out to be identical to the \abstrE/ and \abstrEq/ rules we saw above:
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b} : \term{A \rightarrow B}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\PiE/ $\equiv$ \abstrE/]{\app{\abstr{x}{A}{b}}{a} : \term{B}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\abstr{x}{A}{b(x)} : \term{A \rightarrow B}}
+  \hypo{\term{a} : \term{A}}
+  \infer2[\PiEq/ $\equiv$ \abstrEq/]{\app{\abstr{x}{A}{b}}{a}  = \term{b[x := a]} : \term{B}}
+\end{prooftree*}
+
+We can show all of this with an example. Suppose we want to form a type which maps every employee to a phone extension. We can use the \PiF/ rule:
+
+\begin{prooftree*}
+  \hypo{\term{Em} : \Type/}
+  \hypo{\term{x} : \term{Em}}
+  \hypo{\term{Ext} : \Type/}
+  \infer3[\PiF/]{\depfunc{x}{Em}{Ext} : \Type/}
+\end{prooftree*}
+
+To construct an inhabitant of this type, we can construct a switch:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em}}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x11, x12)} : \term{Ext}}
+\end{prooftree*}
+
+Then we can use the \PiI/ rule and mark $\term{x}$ as replaceable:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em}}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \term{Em}^{1}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x11, x12)} : \term{Ext}}
+  \infer1[\PiI/$^{1}$]{\abstr{x}{Em}{switch(x, x11, x12)} : \depfunc{x}{Em}{Ext}}
+\end{prooftree*}
+
+Here we constructed a function that takes an employee, and returns a phone extension. Here is the mapping:
+
+\begin{align*}
+  \term{Alice} : \term{Em} \rightarrow \term{x11} : \term{Ext} \\
+  \term{Bob} : \term{Em} \rightarrow \term{x12} : \term{Ext}
+\end{align*}
+
+There are no families involved here. This function simply pairs up each employee with an extension. So this is a function from employees to extensions. Hence, we are justified in changing the type from $\depfunc{x}{Em}{Ext}$ to $\term{Em \rightarrow Ext}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em}}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \term{Em}^{1}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x11, x12)} : \term{Ext}}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{Em}{switch(x, x11, x12)} : \term{Em \rightarrow Ext}}
+\end{prooftree*}
+
+Suppose now that we want to use this function to ``look up'' Bob's extension. We could use the \PiE/ or \PiEq/ rule to apply this function to Bob:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em}}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \term{Em}^{1}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x11, x12)} : \term{Ext}}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{Em}{switch(x, x11, x12)} : \term{Em \rightarrow Ext}}
+  
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em}}
+  \infer1[$\term{Bob}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \infer2[\PiEq/]{\app{\abstr{x}{Em}{switch(x, x11, x12)}}{Bob} = \term{x12} : \term{Ext}}
+\end{prooftree*}
+
+But of course, here we are applying a mere function rather than a dependent function, so we are justified in using the \abstrE/ or \abstrEq/ rule instead:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em}}
+  \infer1[$\term{x}$-$\Intro/$]{\term{x} : \term{Em}^{1}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x11}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \hypo{}
+  \infer1[$\term{Ext}$-$\Form/$]{\term{Ext}}
+  \infer1[$\term{x12}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \infer3[$\term{Em}$-$\Elim/$]{\term{switch(x, x11, x12)} : \term{Ext}}
+  \infer1[\abstrI/$^{1}$]{\abstr{x}{Em}{switch(x, x11, x12)} : \term{Em \rightarrow Ext}}
+  
+  \hypo{}
+  \infer1[$\term{Em}$-$\Form/$]{\term{Em}}
+  \infer1[$\term{Bob}$-$\Intro/$]{\term{Bob} : \term{Em}}
+  
+  \infer2[\abstrEq/]{\app{\abstr{x}{Em}{switch(x, x11, x12)}}{Bob} = \term{x12} : \term{Ext}}
+\end{prooftree*}
+
+
+
+\section{Dependent products}
+
+As we saw earlier, products are pairs constructed from two types. We can allow the second type of a product to be a type family. When we do that, we call the type not a mere product, but rather a dependent product.
+
+Suppose we want to form a dependent product from the type $\term{A}$, and the type $\term{B(x)}$ (where $\term{x}$ is an element of $\term{A}$). We could write such a dependent product type like this:
+
+\begin{equation*}
+  \term{x : A \pairSymbol/ B(x)}
+\end{equation*}
+
+However, in CTT, we use a different notation. We write it like this:
+
+\begin{equation*}
+  \depprod{x}{A}{B(x)}
+\end{equation*}
+
+This type represents the pairs we can form by taking some $\term{x}$ from $\term{A}$, and some element from $\term{B(x)}$ --- and not just any member of $\term{B}$, but a member of the type in the family $\term{B(x)}$ that corresponds to $\term{x}$).
+
+For example, we can pair up employees and their projects. For example, $\term{Alice}$ is an employee (i.e., $\term{Alice}$ inhabits the type $\term{Em}$), and $\term{acc}$ is one of her projects (i.e., $\term{acc}$ inhabits the project type that depends on $\term{Prj(Alice)}$). So, we can put the two together to make a pair:
+
+\begin{equation*}
+  \pair{\term{Alice}}{\term{acc}}
+\end{equation*}
+
+The type of this is the product of types $\term{x} : \term{Em}$ and $\term{Prj(x)}$, which we write not as $\term{x : Em \pairSymbol/ Prj(x)}$, but rather as $\depprod{x}{Em}{Prj(x)}$:
+
+\begin{equation*}
+  \pair{\term{Alice}}{\term{acc}} : \depprod{x}{Em}{Prj(x)}
+\end{equation*}
+
+Dependent products are similar to dependent functions in that the second component depends on the first. If you like, the type $\depprod{x}{Em}{Prj(x)}$ is really a family of types itself, one for each $\term{x}$ in $\term{Em}$. So, there is one type of pairs for $\term{Alice} \pairSymbol/ \term{Prj(Alice)}$, and there is another type that pairs for $\term{Bob} \pairSymbol/ \term{Prj(Bob)}$:
+
+\begin{equation*}
+  \depprod{x}{Em}{Prj(x)} \equiv \term{Alice} \pairSymbol/ \term{Prj(Alice)}, \term{Bob} \pairSymbol/ \term{Prj(Bob)}
+\end{equation*}
+
+The second component of each of these pairs matches the first, because the type of the second component (namely, $\term{Prj(x)}$) depends on the value of the first (i.e., which $\term{x}$ that we are dealing with from $\term{Em}$). 
+
+Hence, we cannot pair up $\term{Alice}$ with, say, Bob's projects. This would not be legal:
+
+\begin{equation*}
+  \pair{\term{Alice}}{\term{mrk}} : \depprod{x}{Em}{Prj(x)}
+\end{equation*}
+
+The reason is that $\term{mrk}$ does not inhabit the type $\term{Prj(Alice)}$. Rather, it inhabits $\term{Prj(Bob)}$, and the type $\depprod{x}{Em}{Prj(x)}$ requires that if the first component is $\term{Alice}$, the second component must be an inhabitant of $\term{Prj(Alice)}$.
+
+The rules for dependent products are much like the regular $\pairSymbol/$ product rules, but we convert $\term{B}$ into a type family $\term{B(x)}$. Here is the $\SigmaBinder/$ formation rule:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B(x)} : \Type/}
+  \infer3[\SigmaF/]{\depprod{x}{A}{B(x)} : \Type/}
+\end{prooftree*}
+
+This says that, so long as $\term{A}$ is a legal type in the system, and so long as $\term{B(x)}$ is a legal type in the system (for any $\term{x}$ in $\term{A}$), then the dependent product $\depprod{x}{A}{B(x)}$ is also a legal type in the system.
+
+To introduce an element of this type, we need an element $\term{x}$ of $\term{A}$, and an element of $\term{B(x)}$. If we have one of each, then we can put them together into a pair. Here is the $\SigmaBinder/$ introduction rule:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B(x)} : \Type/}
+  \hypo{\term{b} : \term{B(x)}}
+  \infer4[\SigmaI/]{\pair{\term{x}}{\term{b}} : \depprod{x}{A}{B(x)}}
+\end{prooftree*}
+
+
+\section{Dependent product elimination rules}
+
+The $\SigmaBinder/$ elimination rule is much like the \pairE/ rule, but we need to account for dependent types. Recall the pair elimination rule:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \term{A \pairSymbol/ B}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer2[\pairE/]{\term{elim(\pair{a}{b}, c)} : \term{C}}
+\end{prooftree*}
+
+This says that if we can construct an object $\term{c}$ of type $\term{C}$ (possibly using objects from $\term{A}$ and $\term{B}$), then if we have a pair $\pair{a}{b}$ of type $\term{A \pairSymbol/ B}$, we can rebuild $\term{c} : \term{C}$ using $\term{a}$ and $\term{b}$ instead.
+
+Let us reformulate this rule, and add in dependent types. First, suppose we can construct an object $\term{c}$ of type $\term{C}$, using $\term{x}$ of type $\term{A}$ and $\term{y}$ of type $\term{B(x)}$:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C}}
+  \infer[no rule]1{}
+\end{prooftree*}
+
+But of course, the type of $\term{c}$ might depend on the value of $\term{x}$ now. So we need to indicate that we can substitute $\term{x}$ into $\term{C}$:
+
+\begin{prooftree*}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer[no rule]1{}
+\end{prooftree*}
+
+Now suppose that we have a pair from the type $\depprod{x}{A}{B(x)}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \depprod{x}{A}{B(x)}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer[no rule]2{}
+\end{prooftree*}
+
+At this point, we can rebuild $\term{c}$ of type $\term{C(x)}$, using $\term{a}$ and $\term{b}$ instead of $\term{x}$ and $\term{y}$. For that, we can use the $\term{elim()}$ selector we used in the \pairE/ rule:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \depprod{x}{A}{B(x)}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer2{\term{elim(\pair{a}{b}, c)}}
+\end{prooftree*}
+
+The type of the result will be $\term{C(x)}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \depprod{x}{A}{B(x)}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer2{\term{elim(\pair{a}{b}, c)} : \term{C(x)}}
+\end{prooftree*}
+
+This is the elimination rule for dependent products. We will call it \SigmaE/:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \depprod{x}{A}{B(x)}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer2[\SigmaE/]{\term{elim(\pair{a}{b}, c)} : \term{C(x)}}
+\end{prooftree*}
+
+The computation rule is much the same, except $\term{a}$ and $\term{b}$ should be substituted in for $\term{x}$ and $\term{y}$:
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \depprod{x}{A}{B(x)}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer2[\SigmaEq/]{\term{elim(\pair{a}{b}, c)} : \term{C(x)[x := a, y := b]}}
+\end{prooftree*}
+
+
+\subsection{Examples.}
+
+Let us construct a type that uses an employee and one of their projects to build it. To do this, we can pair up an employee and one of their projects, and then we can pair that up with a room. So first, let us pair up an employee with one of their projects, e.g., $\term{Alice}$ and $\term{acc}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \infer2{\term{Prj(Alice)} : \Type/}
+  \infer1{\term{acc} : \term{Prj(Alice)}}
+
+  \infer2{\pair{Alice}{acc} : \depprod{x}{Em}{Prj(x)}}
+\end{prooftree*}
+
+Now let us pair up that pair with, say, a room:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \infer2{\term{Prj(Alice)} : \Type/}
+  \infer1{\term{acc} : \term{Prj(Alice)}}
+
+  \infer2{\pair{Alice}{acc} : \depprod{x}{Em}{Prj(x)}}
+  
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  
+  \infer2{\pair{\pair{Alice}{acc}}{r01} : \term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}}
+\end{prooftree*}
+
+Here we have constructed a type (namely $\term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}$), and we used an employee (namely $\term{Alice}$) and one of her projects (namely, $\term{acc}$) in the construction process.
+
+Now suppose we have a pair of a different employee and project, for instance:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Bob} : \term{Em}}
+  \infer2{\term{Prj(Bob)} : \Type/}
+  \infer1{\term{mrk} : \term{Prj(Bob)}}
+
+  \infer2{\pair{Bob}{mrk} : \depprod{x}{Em}{Prj(x)}}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{Alice}{acc} : \depprod{x}{Em}{Prj(x)}}
+  
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\term{r01} : \term{Rm}}
+  
+  \infer2{\pair{\pair{Alice}{acc}}{r01} : \term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+The dependent product elimination rule says that we can rebuild the type on the right, using the components of the pair on the left:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{Bob}{mrk} : \depprod{x}{Em}{Prj(x)}}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{\pair{Alice}{acc}}{r01} : \term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}}
+  
+  \infer2[\SigmaE/]{\term{elim(\pair{Bob}{mrk}, \pair{\pair{Alice}{acc}}{r01})} : \term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}}
+\end{prooftree*}
+
+To do that, we replace $\term{Alice}$ with $\term{Bob}$, and we replace $\term{acc} : \term{Prj(Alice)}$ with $\term{mrk} : \term{Prj(Bob)}$. To use the computation rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{Bob}{mrk} : \depprod{x}{Em}{Prj(x)}}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{\pair{Alice}{acc}}{r01} : \term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}}
+  
+  \infer2[\SigmaE/]{\term{elim(\ldots)} = \pair{\pair{Bob}{mrk}}{\term{r01}} : \term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}}
+\end{prooftree*}
+
+In this example, $\term{c}$ from the elimination rule template is $\pair{\pair{Alice}{acc}}{r01}$, and $\term{C}$ is the type $\term{(\depprod{x}{Em}{Prj(x)}) \pairSymbol/ Rm}$. Also, $\term{a}$ and $\term{x}$ are $\term{Bob}$ and $\term{Alice}$, while $\term{b}$ and $\term{y}$ are $\term{mrk}$ and $\term{acc}$, respectively. And just as the elimination rule says, here we constructed a type $\term{C}$ (and we used $\term{x}$ and $\term{y}$ to do it), and then we rebuilt that type using $\term{a}$ and $\term{b}$ instead.
+
+As with regular product types, we do not need to use either or both of $\term{x}$ and $\term{y}$ to construct $\term{c} : \term{C}$. For example, suppose we pair up $\term{Alice}$ with the room $\term{r01}$:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+\end{prooftree*}
+
+Now suppose we have a pair consisting of $\term{Bob}$ and his project $\term{mrk}$:
+
+\begin{prooftree*}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{Bob}{mrk} : \depprod{x}{Em}{Prj(x)}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+  
+  \infer[no rule]2{}
+\end{prooftree*}
+
+The object on the right is constructed using an employee (namely $\term{Alice}$), but not a project. Nevertheless, we can still use the elimination rule to rebuild the pair on the right with the pair on the left. It's just that $\term{mrk}$ from the pair on the left will not be used in the pair on the right:
+
+\begin{prooftree*}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{Bob}{mrk} : \depprod{x}{Em}{Prj(x)}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+  
+  \infer2{\term{elim(\pair{Bob}{mrk}, \pair{Alice}{r01})} : \term{Em \pairSymbol/ Rm}}
+\end{prooftree*}
+
+Or, using the computation rule:
+
+\begin{prooftree*}
+
+  \hypo{}
+  \ellipsis{}{}
+  \infer1{\pair{Bob}{mrk} : \depprod{x}{Em}{Prj(x)}}
+
+  \hypo{}
+  \infer1{\term{Em} : \Type/}
+  \infer1{\term{Alice} : \term{Em}}
+  \hypo{}
+  \infer1{\term{Rm} : \Type/}
+  \infer1{\term{r01} : \term{Rm}}
+  \infer2{\pair{\term{Alice}}{\term{r01}} : \term{Em \pairSymbol/ Rm}}
+  
+  \infer2{\term{elim(\pair{Bob}{mrk}, \pair{Alice}{r01})} = \pair{Bob}{r01} : \term{Em \pairSymbol/ Rm}}
+\end{prooftree*}
+
+This makes it clear that when we rebuild the pair, we substitute $\term{Bob}$ for $\term{Alice}$, and we simply do not use $\term{mrk}$. The rebuilt pair is $\pair{Bob}{r01}$.
+
+
+\subsection{Existential quantifiers.}
+
+The type $\depprod{x}{A}{B(x)}$ pairs up any object $\term{x}$ from $\term{A}$ with an object from the corresponding type in the family $\term{B(x)}$. This means the only pairs we can form to inhabit this type are those where $\term{x}$ has at least one corresponding inhabitant in $\term{B(x)}$. 
+
+For example, suppose that there are three objects in $\term{A}$, called $\term{a}$, $\term{b}$, and $\term{c}$. Suppose also that $\term{B(a)}$ has two inhabitants, called $\term{m}$ and $\term{n}$, $\term{B(b)}$ has one inhabitant, called $\term{k}$, and $\term{B(c)}$ has no inhabitants. Here is the correspondence from each inhabitant $\term{x}$ in $\term{A}$ to each inhabitant $\term{y}$ in $ \term{B(x)}$ (if any):
+
+\begin{align*}
+  \term{a} : \term{A}  \hskip 0.5cm \longrightarrow \hskip 0.5cm &\term{m} : \term{B(a)} \\
+  \term{a} : \term{A}  \hskip 0.5cm \longrightarrow \hskip 0.5cm &\term{n} : \term{B(a)} \\
+  \\
+  \term{b} : \term{A}  \hskip 0.5cm \longrightarrow \hskip 0.5cm &\term{k} : \term{B(b)} \\   
+  \\
+  \term{c} : \term{A}  \hskip 0.5cm \longrightarrow \hskip 0.5cm &\varnothing : \term{B(c)}
+\end{align*}
+
+If we want to form all pairs where the first element is from $\term{A}$ and the second element is from the corresponding type in the family $\term{B(x)}$, then we can only form the following pairs:
+
+\begin{equation*}
+  \pair{a}{m} \hskip 1cm \pair{a}{n} \hskip 1cm \pair{b}{k}
+\end{equation*}
+
+Since $\term{B(a)}$ has two inhabitants, we can pair up $\term{a}$ from $\term{A}$ with either of the inhabitants of $\term{B(a)}$. Hence, we can form the pairs $\pair{a}{m}$ and $\pair{a}{n}$. Since $\term{B(b)}$ has one inhabitant, we can pair up $\term{b}$ from $\term{B}$ with that inhabitant, hence we can form the pair $\pair{b}{k}$. However, $\term{B(c)}$ has no inhabitants at all, so we cannot pair up $\term{c}$ with anything.
+
+If you like, you can think of it like this: with the dependent product, you can only form \emph{some} of all possible pairs. In particular, you can only form pairs where the first component has a corresponding second component.
+
+Notice that the regular product is not like this. Consider $\term{A \pairSymbol/ B}$. Since the second component $\term{B}$ is not dependent, you can pair up any element from $\term{A}$ with any element of $\term{B}$. Hence, you can always form every possible pair for regular products.
+
+But this is not so for dependent products, since the second component of the product depends on the first component, and this opens the possibility that there may not be a corresponding object for the second component. 
+
+Because of this, it is natural to view the dependent product as the existential quantifier. The inhabitants of a dependent product are only those objects from the first type that have a corresponding object from the second type. That is, the only inhabitants of $\depprod{x}{A}{B(x)}$ are those where an object from $\term{A}$ has a satisfying or corresponding object/proof from $\term{B(x)}$.
+
+Here are the dependent product rules written out again, but using the existential quantifier symbol instead of the sigma:
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B(x)} : \Type/}
+  \infer3[\someF/]{\some{x}{A}{B(x)} : \Type/}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\term{A} : \Type/}
+  \hypo{\term{x} : \term{A}}
+  \hypo{\term{B(x)} : \Type/}
+  \hypo{\term{b} : \term{B(x)}}
+  \infer4[\someI/]{\pair{\term{x}}{\term{b}} : \some{x}{A}{B(x)}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \some{x}{A}{B(x)}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer2[\someE/]{\term{elim(\pair{a}{b}, c)} : \term{C(x)}}
+\end{prooftree*}
+
+\begin{prooftree*}
+  \hypo{\pair{\term{a}}{\term{b}} : \some{x}{A}{B(x)}}
+  \hypo{\term{x} : \term{A}, \term{y} : \term{B(x)}}
+  \ellipsis{}{\term{c} : \term{C(x)}}
+  \infer2[\someEq/]{\term{elim(\pair{a}{b}, c)} : \term{C(x)[x := a, y := b]}}
+\end{prooftree*}
+
+
+\subsection{Projections}
+
+From the dependent product elimination rules, we can derive $\fst{}$ and $\snd{}$ projections too, just as we can for the regular product. To define $\fst{}$, set $\term{C}$ in the elimination rule template to $\term{A}$, and to define $\snd{}$, set $\term{C}$ to $\term{B(x)}$. That yields the following first and second projection rules:
+
+$$
+\begin{prooftree}
+  \hypo{\pair{x}{b} : \depprod{x}{A}{B(x)} : \Type/}
+  \infer1[\SigmaEL/]{\fst{\pair{x}{b}} : \term{A}}
+\end{prooftree}
+\hskip 0.5cm
+\begin{prooftree}
+  \hypo{\pair{x}{b} : \depprod{x}{A}{B(x)} : \Type/}
+  \infer1[\SigmaER/]{\snd{\pair{x}{b}} : \term{B(x)}}
+\end{prooftree}
+$$
+
+And the computation rules:
+
+$$
+\begin{prooftree}
+  \hypo{\pair{x}{b} : \depprod{x}{A}{B(x)} : \Type/}
+  \infer1[\SigmaEqL/]{\fst{\pair{x}{b}} = \term{x} : \term{A}}
+\end{prooftree}
+\hskip 0.5cm
+\begin{prooftree}
+  \hypo{\pair{x}{b} : \depprod{x}{A}{B(x)} : \Type/}
+  \infer1[\SigmaEqR/]{\snd{\pair{x}{b}} = \term{b} : \term{B(x)}}
+\end{prooftree}
+$$
+
+
+\section{Negation}
+
+We will say that there is a special type that represents the impossible state of affairs of being false or absurd. We will call this type ``falsum'' or ``bottom,'' and write it with the traditional bottom symbol $\Falsum/$. Here is the formation rule:
+
+\begin{prooftree*}
+  \hypo{}
+  \infer1[$\Falsum/$-$\Form/$]{\Falsum/ : \Type/}
+\end{prooftree*}
+
+There are no elements in this type, because it represents the impossible state of affairs, i.e., the absurd state of being in contradiction. And since this type cannot be inhabited, there cannot be any introduction rules either. 
+
+However, suppose that we somehow did manage to derive an element that inhabits this type. Let's call that element $\term{b}$:
+
+\begin{prooftree*}
+  \hypo{\term{b} : \Falsum/}
+\end{prooftree*}
+
+We can mark $\term{x}$ (of some type $\term{A}$ as replaceable, to form a function:
+
+\begin{prooftree*}
+    \hypo{\term{b} : \Falsum/}
+    \hypo{\term{x} : \term{A}^{1}}
+    \infer2[\abstrI/$^{1}$]{\abstr{x}{A}{b} : \term{A \rightarrow \Falsum/}}
+\end{prooftree*}
+
+This function takes any inhabitant of $\term{A}$, and it returns falsum.
+
+As an abbreviation, we can write ``$\term{A \rightarrow \Falsum/}$'' as ``$\term{\lnot A}$.'' Hence, this is equivalent:
+
+\begin{prooftree*}
+    \hypo{\term{b} : \Falsum/}
+    \hypo{\term{x} : \term{A}^{1}}
+    \infer2[\abstrI/$^{1}$]{\abstr{x}{A}{b} : \term{\lnot A}}
+\end{prooftree*}
+
+
+\end{document}
